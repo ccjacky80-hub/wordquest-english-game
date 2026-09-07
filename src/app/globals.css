@@ -450,6 +450,74 @@ h1 {
   width: 100%;
 }
 
+.mission-game-links {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.picture-match-prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.picture-match-prompt h1 {
+  margin: 0 0 1rem;
+  font-size: clamp(2.25rem, 6vw, 4.75rem);
+  letter-spacing: -0.045em;
+}
+
+.picture-match-target {
+  width: min(60vw, 15rem);
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 1.75rem;
+  box-shadow: 0 0.8rem 0 rgba(85, 112, 134, 0.2);
+}
+
+.picture-match-choices {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(0.7rem, 2vw, 1.25rem);
+  margin-top: 1.5rem;
+}
+
+.picture-match-choice {
+  min-height: 4.25rem;
+  padding: 0.8rem;
+  border: 2px solid transparent;
+  border-radius: 1.15rem;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0.4rem 0 rgba(85, 112, 134, 0.18);
+  cursor: pointer;
+  font-size: clamp(1rem, 2.6vw, 1.35rem);
+  font-weight: 700;
+}
+
+.picture-match-choice:hover,
+.picture-match-choice:focus-visible,
+.picture-choice-hint {
+  border-color: var(--coral);
+}
+
+.picture-choice-selected {
+  color: #fff;
+  background: var(--coral);
+}
+
+.picture-choice-wrong {
+  color: var(--coral-dark);
+  background: #ffe6de;
+}
+
+.picture-match-choice:disabled {
+  cursor: wait;
+}
+
 .mission-note {
   margin: 1rem 0 0;
   color: var(--muted);
@@ -707,6 +775,14 @@ h1 {
 
   .map-progress .progress-track {
     flex: initial;
+  }
+
+  .mission-game-links {
+    grid-template-columns: 1fr;
+  }
+
+  .picture-match-choices {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .mission-overview {

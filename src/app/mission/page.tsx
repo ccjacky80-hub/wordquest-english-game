@@ -35,10 +35,15 @@ export default function MissionPage() {
           </div>
         ))}
       </div>
-      <Link className="primary-action wide-action" href="/play/treasure-hunt">
-        Begin the adventure
-      </Link>
-      <p className="mission-note">You can listen again whenever you need.</p>
+      <div className="mission-game-links">
+        <Link className="primary-action wide-action" href="/play/treasure-hunt">
+          Listen &amp; find
+        </Link>
+        <Link className="secondary-action wide-action" href="/play/picture-match">
+          Look &amp; match
+        </Link>
+      </div>
+      <p className="mission-note">You can listen again or look again whenever you need.</p>
     </ChildPageFrame>
   );
 }

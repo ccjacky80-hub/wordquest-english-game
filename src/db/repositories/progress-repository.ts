@@ -5,6 +5,7 @@ import { wordQuestDb, type WordQuestDB } from '../db';
 
 export interface ProgressRepository {
   getWordProgress(wordId: string): Promise<WordProgress | undefined>;
+  getAttemptsBySession(sessionId: string): Promise<GameAttempt[]>;
   recordAttempt(attempt: GameAttempt): Promise<WordProgress>;
 }
 
@@ -12,6 +13,9 @@ export function createProgressRepository(db: WordQuestDB = wordQuestDb): Progres
   return {
     async getWordProgress(wordId: string): Promise<WordProgress | undefined> {
       return db.wordProgress.get(wordId);
+    },
+    async getAttemptsBySession(sessionId: string): Promise<GameAttempt[]> {
+      return db.attempts.where('sessionId').equals(sessionId).toArray();
     },
     async recordAttempt(attempt: GameAttempt): Promise<WordProgress> {
       return db.transaction('rw', db.wordProgress, db.attempts, async () => {
