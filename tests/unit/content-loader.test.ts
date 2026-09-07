@@ -20,12 +20,13 @@ describe('vocabulary content loader', () => {
   });
 });
 
-describe('Day 1 temporary mission allocation', () => {
-  it('uses MVP ranks 1-6 and records the temporary source', () => {
+describe('Day 1 official mission allocation', () => {
+  it('uses the official Day1 IDs and records the official source', () => {
     const mission = createDay1Mission();
     expect(mission.dayIndex).toBe(1);
     expect(mission.newWordIds).toHaveLength(6);
-    expect(mission.newWords.map((word) => word.mvp?.rank)).toEqual([1, 2, 3, 4, 5, 6]);
-    expect(mission.assignmentSource).toBe('temporary-mvp-rank');
+    expect(mission.newWords.map((word) => word.id)).toEqual(mission.newWordIds);
+    expect(mission.assignmentSource).toBe('official-day-plan');
+    expect(mission.reviewRule).toBe('all-previous');
   });
 });
