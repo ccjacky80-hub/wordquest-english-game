@@ -110,7 +110,7 @@
 # Phase 3 — 本地数据与学习引擎
 
 ## TASK-007 — Dexie DB v1
-**Status: TODO**
+**Status: DONE**
 
 表：
 - wordProgress
@@ -127,14 +127,14 @@
 - [ ] 测试覆盖初始化
 
 ## TASK-008 — Attempt quality 纯函数
-**Status: TODO**
+**Status: DONE**
 
 验收：
 - [ ] 五类 outcome 映射正确
 - [ ] 单测全部通过
 
 ## TASK-009 — Word mastery 更新函数
-**Status: TODO**
+**Status: DONE**
 
 验收：
 - [ ] Seen/Recognized/Recalled/Used/Mastered 按证据推进
@@ -142,7 +142,7 @@
 - [ ] 同一天刷题不能直接 Mastered
 
 ## TASK-010 — Review scheduler v1
-**Status: TODO**
+**Status: DONE**
 
 验收：
 - [ ] 10m / 1d / 3d / 7d / 14d / 30d
@@ -151,7 +151,7 @@
 - [ ] 单元测试覆盖时区/日期边界基础场景
 
 ## TASK-011 — Confusion pair 逻辑
-**Status: TODO**
+**Status: DONE**
 
 验收：
 - [ ] 选错另一个词时计数
