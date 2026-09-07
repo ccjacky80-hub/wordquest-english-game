@@ -48,6 +48,9 @@ export default function MissionPage() {
         <Link className="secondary-action wide-action" href="/play/picture-match">
           Look &amp; match
         </Link>
+        <Link className="secondary-action wide-action" href="/play/word-builder">
+          Build words
+        </Link>
       </div>
       <p className="mission-note">You can listen again or look again whenever you need.</p>
     </ChildPageFrame>

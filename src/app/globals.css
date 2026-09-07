@@ -452,8 +452,73 @@ h1 {
 
 .mission-game-links {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.75rem;
+}
+
+.word-builder-prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.word-builder-prompt h1 {
+  min-width: 8ch;
+  margin: 1rem 0 0;
+  color: var(--ink);
+  font-size: clamp(3rem, 12vw, 7rem);
+  letter-spacing: 0.14em;
+}
+
+.letters-bouncing {
+  animation: letter-bounce 180ms ease-in-out 2;
+}
+
+@keyframes letter-bounce {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-0.18rem) rotate(-1deg); }
+}
+
+.letter-bank {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.8rem;
+  max-width: 36rem;
+  margin: 2rem auto 0;
+}
+
+.letter-tile {
+  width: 4rem;
+  height: 4rem;
+  border: 0;
+  border-radius: 1rem;
+  color: var(--ink);
+  background: #ffe08b;
+  box-shadow: 0 0.4rem 0 #d9aa48;
+  cursor: pointer;
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-transform: lowercase;
+}
+
+.letter-tile:hover,
+.letter-tile:focus-visible {
+  transform: translateY(-2px);
+  outline: 3px solid var(--coral);
+  outline-offset: 2px;
+}
+
+.letter-tile:disabled {
+  cursor: wait;
+  opacity: 0.52;
+}
+
+.word-builder-hint {
+  margin: 1.5rem 0 0;
+  color: var(--muted);
+  text-align: center;
 }
 
 .picture-match-prompt {

@@ -56,7 +56,10 @@ export function computeDailyProgress(attempts: readonly GameAttempt[]): DailyPro
   };
 }
 
-export function getDailySessionId(dayIndex: number, gameType: 'treasure-hunt' | 'picture-match'): string {
+export function getDailySessionId(
+  dayIndex: number,
+  gameType: 'treasure-hunt' | 'picture-match' | 'word-builder',
+): string {
   if (!Number.isInteger(dayIndex) || dayIndex < 1 || dayIndex > 7) {
     throw new RangeError(`dayIndex must be an integer from 1 to 7; received ${dayIndex}`);
   }
