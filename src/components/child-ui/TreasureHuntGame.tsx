@@ -7,9 +7,11 @@ import { createProgressRepository } from '@/db/repositories/progress-repository'
 import { createGameAttempt } from '@/games/game-attempt';
 import type { GameAttempt } from '@/domain/learning/types';
 import type { VocabularyEntry } from '@/content/schemas';
+import { getDailySessionId } from '@/content/progress-scheduler';
 
 interface TreasureHuntGameProps {
   words: VocabularyEntry[];
+  dayIndex: number;
 }
 
 interface Round {
@@ -26,7 +28,7 @@ function createRound(words: VocabularyEntry[], index: number): Round {
   };
 }
 
-export function TreasureHuntGame({ words }: TreasureHuntGameProps) {
+export function TreasureHuntGame({ words, dayIndex }: TreasureHuntGameProps) {
   const [roundIndex, setRoundIndex] = useState(0);
   const [attempts, setAttempts] = useState<GameAttempt[]>([]);
   const [feedback, setFeedback] = useState('Listen, then find the animal.');
@@ -35,6 +37,7 @@ export function TreasureHuntGame({ words }: TreasureHuntGameProps) {
   const [savedCount, setSavedCount] = useState(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const repository = useMemo(() => createProgressRepository(), []);
+  const sessionId = getDailySessionId(dayIndex, 'treasure-hunt');
   const round = createRound(words, roundIndex);
 
   const playAudio = useCallback(() => {
@@ -54,16 +57,19 @@ export function TreasureHuntGame({ words }: TreasureHuntGameProps) {
 
   useEffect(() => {
     let cancelled = false;
-    void Promise.all(words.map((word) => repository.getWordProgress(word.id))).then((progressEntries) => {
-      if (!cancelled && progressEntries.every((progress) => progress !== undefined)) {
-        setSavedCount(progressEntries.length);
+    void repository.getAttemptsBySession(sessionId).then((savedAttempts) => {
+      const completedWordIds = new Set(
+        savedAttempts.filter((attempt) => attempt.outcome !== 'wrong').map((attempt) => attempt.wordId),
+      );
+      if (!cancelled && completedWordIds.size === words.length) {
+        setSavedCount(savedAttempts.length);
         setComplete(true);
       }
     });
     return () => {
       cancelled = true;
     };
-  }, [repository, words]);
+  }, [repository, sessionId, words]);
 
   const handleChoice = async (choice: VocabularyEntry) => {
     if (locked || complete) return;
@@ -71,7 +77,7 @@ export function TreasureHuntGame({ words }: TreasureHuntGameProps) {
     const isCorrect = choice.id === round.target.id;
     const attempt = createGameAttempt({
       id: `${round.target.id}-${Date.now()}`,
-      sessionId: 'day1-treasure-hunt',
+      sessionId,
       gameType: 'treasure-hunt',
       wordId: round.target.id,
       relatedWordIds: round.target.relatedWordIds,
@@ -132,7 +138,7 @@ export function TreasureHuntGame({ words }: TreasureHuntGameProps) {
       isComplete={complete}
       onExit={() => { window.location.href = '/mission'; }}
     >
-      <div className="treasure-prompt">
+      <div className="treasure-prompt" data-target-word-id={round.target.id}>
         <p className="game-eyebrow">LISTEN &amp; FIND</p>
         <h1>Find the animal!</h1>
         <button className="listen-button" type="button" onClick={playAudio}>
@@ -144,6 +150,7 @@ export function TreasureHuntGame({ words }: TreasureHuntGameProps) {
         {round.choices.map((choice) => (
           <button
             className="treasure-choice"
+            data-word-id={choice.id}
             type="button"
             key={choice.id}
             onClick={() => void handleChoice(choice)}

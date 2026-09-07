@@ -1,15 +1,21 @@
+'use client';
+
 import Link from 'next/link';
 import { ChildPageFrame } from '@/components/child-ui/ChildPageFrame';
-import { createDay1Mission } from '@/content/daily-plan';
+import { useCurrentDailyMission } from '@/content/use-current-daily-mission';
 
 export default function MissionPage() {
-  const mission = createDay1Mission();
+  const { mission, currentDayIndex, courseCompleted, isLoading } = useCurrentDailyMission();
 
   return (
     <ChildPageFrame
-      eyebrow="TODAY&apos;S MISSION / 今日任务"
-      title="Help the animals!"
-      description="Listen, find six new friends, and unlock the first trail in Animal Kingdom."
+      eyebrow={`DAY ${currentDayIndex} / TODAY&apos;S MISSION`}
+      title={courseCompleted ? 'Seven days complete!' : `Day ${currentDayIndex}: help the animals!`}
+      description={isLoading
+        ? 'Loading your adventure...'
+        : courseCompleted
+          ? 'You completed the full Animal Kingdom course. Keep your word trail bright with review.'
+          : `Today&apos;s path has ${mission.newWords.length} new words and ${mission.reviewWords.length} review words.`}
       backHref="/"
       backLabel="Home"
     >

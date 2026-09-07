@@ -1,7 +1,11 @@
+'use client';
+
 import { TreasureHuntGame } from '@/components/child-ui/TreasureHuntGame';
-import { createDay1Mission } from '@/content/daily-plan';
+import { useCurrentDailyMission } from '@/content/use-current-daily-mission';
 
 export default function TreasureHuntPage() {
-  const mission = createDay1Mission();
-  return <TreasureHuntGame words={mission.newWords} />;
+  const { mission, currentDayIndex, isLoading } = useCurrentDailyMission();
+  const words = mission.newWords.length > 0 ? mission.newWords : mission.reviewWords;
+  if (isLoading) return <main className="game-shell"><p className="feedback-text">Loading your adventure...</p></main>;
+  return <TreasureHuntGame words={words} dayIndex={currentDayIndex} />;
 }

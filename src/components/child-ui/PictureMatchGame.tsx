@@ -7,9 +7,11 @@ import { createProgressRepository } from '@/db/repositories/progress-repository'
 import { createGameAttempt } from '@/games/game-attempt';
 import type { GameAttempt } from '@/domain/learning/types';
 import type { VocabularyEntry } from '@/content/schemas';
+import { getDailySessionId } from '@/content/progress-scheduler';
 
 interface PictureMatchGameProps {
   words: VocabularyEntry[];
+  dayIndex: number;
   optionCount?: 2 | 3 | 4;
 }
 
@@ -34,7 +36,7 @@ function createRound(
   };
 }
 
-export function PictureMatchGame({ words, optionCount = 4 }: PictureMatchGameProps) {
+export function PictureMatchGame({ words, dayIndex, optionCount = 4 }: PictureMatchGameProps) {
   const [roundIndex, setRoundIndex] = useState(0);
   const [roundAttempts, setRoundAttempts] = useState(0);
   const [attempts, setAttempts] = useState<GameAttempt[]>([]);
@@ -44,11 +46,12 @@ export function PictureMatchGame({ words, optionCount = 4 }: PictureMatchGamePro
   const [complete, setComplete] = useState(false);
   const [savedAttemptCount, setSavedAttemptCount] = useState(0);
   const repository = useMemo(() => createProgressRepository(), []);
+  const sessionId = getDailySessionId(dayIndex, 'picture-match');
   const round = createRound(words, roundIndex, optionCount);
 
   useEffect(() => {
     let cancelled = false;
-    void repository.getAttemptsBySession('day1-picture-match').then((savedAttempts) => {
+    void repository.getAttemptsBySession(sessionId).then((savedAttempts) => {
       const completedWordIds = new Set(
         savedAttempts
           .filter((attempt) => attempt.outcome !== 'wrong')
@@ -62,7 +65,7 @@ export function PictureMatchGame({ words, optionCount = 4 }: PictureMatchGamePro
     return () => {
       cancelled = true;
     };
-  }, [repository, words]);
+  }, [repository, sessionId, words]);
 
   const handleChoice = async (choice: VocabularyEntry) => {
     if (locked || complete) return;
@@ -72,7 +75,7 @@ export function PictureMatchGame({ words, optionCount = 4 }: PictureMatchGamePro
     const attemptNumber = roundAttempts + 1;
     const attempt = createGameAttempt({
       id: `picture-match-${round.target.id}-${Date.now()}`,
-      sessionId: 'day1-picture-match',
+      sessionId,
       gameType: 'picture-match',
       wordId: round.target.id,
       relatedWordIds: round.target.relatedWordIds,
