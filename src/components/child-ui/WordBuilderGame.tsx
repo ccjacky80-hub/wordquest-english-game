@@ -9,57 +9,100 @@ import { getDailySessionId } from '@/content/progress-scheduler';
 import type { GameAttempt } from '@/domain/learning/types';
 import type { VocabularyEntry } from '@/content/schemas';
 
+export type BuilderLevel = 'L1' | 'L2' | 'L3';
+
 interface WordBuilderGameProps {
   words: VocabularyEntry[];
   dayIndex: number;
+  defaultLevel?: BuilderLevel;
+}
+
+interface LetterToken {
+  id: string;
+  letter: string;
 }
 
 interface WordBuilderRound {
   target: VocabularyEntry;
+  normalizedWord: string;
   missingIndexes: number[];
-  letters: string[];
+  tokens: LetterToken[];
 }
 
-function createRound(words: VocabularyEntry[], roundIndex: number): WordBuilderRound {
+const LEVEL_DESCRIPTIONS: Record<BuilderLevel, string> = {
+  L1: 'Fill 1–2 missing letters.',
+  L2: 'Put every letter in order.',
+  L3: 'Listen, then build the whole word.',
+};
+
+function normalizeWord(word: string): string {
+  return word.replace(/[^a-z]/gi, '').toLowerCase();
+}
+
+function shuffle<T>(items: T[]): T[] {
+  return [...items].sort((left, right) => String(left).localeCompare(String(right)));
+}
+
+function createRound(words: VocabularyEntry[], roundIndex: number, level: BuilderLevel): WordBuilderRound {
   const target = words[roundIndex];
-  const normalizedWord = target.word.replace(/[^a-z]/gi, '').toLowerCase();
+  const normalizedWord = normalizeWord(target.word);
   const missingCount = normalizedWord.length >= 5 ? 2 : 1;
-  const missingIndexes = Array.from({ length: missingCount }, (_, index) =>
-    Math.max(0, normalizedWord.length - missingCount + index),
-  );
-  const missingLetters = missingIndexes.map((index) => normalizedWord[index]);
-  const letters = [...missingLetters, ...['a', 'e', 'i', 'o', 'u']]
-    .filter((letter, index, all) => all.indexOf(letter) === index)
-    .slice(0, missingCount + 4);
-  return { target, missingIndexes, letters };
+  const missingIndexes = level === 'L1'
+    ? Array.from({ length: missingCount }, (_, index) => Math.max(0, normalizedWord.length - missingCount + index))
+    : [];
+  const letters = level === 'L1'
+    ? [...new Set(missingIndexes.map((index) => normalizedWord[index]).concat(['a', 'e', 'i', 'o', 'u']))]
+        .slice(0, missingCount + 4)
+    : shuffle([...normalizedWord]);
+
+  return {
+    target,
+    normalizedWord,
+    missingIndexes,
+    tokens: letters.map((letter, index) => ({ id: `${target.id}-${level}-${index}`, letter })),
+  };
 }
 
-function maskWord(word: string, missingIndexes: number[], selectedLetters: string[]): string {
-  const normalized = word.replace(/[^a-z]/gi, '').toLowerCase();
-  let selectedIndex = 0;
-  return [...normalized]
-    .map((letter, index) => {
-      if (!missingIndexes.includes(index)) return letter;
-      const selected = selectedLetters[selectedIndex];
+function displayWord(round: WordBuilderRound, level: BuilderLevel, selectedTokens: LetterToken[]): string {
+  if (level === 'L1') {
+    let selectedIndex = 0;
+    return [...round.normalizedWord].map((letter, index) => {
+      if (!round.missingIndexes.includes(index)) return letter;
+      const selected = selectedTokens[selectedIndex]?.letter;
       selectedIndex += 1;
       return selected ?? '_';
-    })
-    .join('');
+    }).join('');
+  }
+
+  if (level === 'L3') {
+    return selectedTokens.map((token) => token.letter).join('') + '_'.repeat(round.normalizedWord.length - selectedTokens.length);
+  }
+
+  return selectedTokens.map((token) => token.letter).join('') + '_'.repeat(round.normalizedWord.length - selectedTokens.length);
 }
 
-export function WordBuilderGame({ words, dayIndex }: WordBuilderGameProps) {
+export function WordBuilderGame({ words, dayIndex, defaultLevel = 'L1' }: WordBuilderGameProps) {
+  const [level, setLevel] = useState<BuilderLevel>(defaultLevel);
   const [roundIndex, setRoundIndex] = useState(0);
-  const [selectedLetters, setSelectedLetters] = useState<string[]>([]);
+  const [selectedTokens, setSelectedTokens] = useState<LetterToken[]>([]);
   const [attempts, setAttempts] = useState<GameAttempt[]>([]);
   const [feedback, setFeedback] = useState('Build the word. Pick a letter.');
   const [bouncing, setBouncing] = useState(false);
   const [locked, setLocked] = useState(false);
   const [complete, setComplete] = useState(false);
   const [savedAttemptCount, setSavedAttemptCount] = useState(0);
+  const [audioReplayCount, setAudioReplayCount] = useState(0);
   const repository = useMemo(() => createProgressRepository(), []);
   const sessionId = getDailySessionId(dayIndex, 'word-builder');
-  const round = createRound(words, roundIndex);
-  const maskedWord = maskWord(round.target.word, round.missingIndexes, selectedLetters);
+  const round = createRound(words, roundIndex, level);
+  const shownWord = displayWord(round, level, selectedTokens);
+
+  const playAudio = () => {
+    if (level !== 'L3' || !round.target.audioPath) return;
+    const audio = new Audio(round.target.audioPath);
+    void audio.play().catch(() => setFeedback('Tap Listen again to hear the word.'));
+    setAudioReplayCount((count) => count + 1);
+  };
 
   useEffect(() => {
     let cancelled = false;
@@ -77,18 +120,35 @@ export function WordBuilderGame({ words, dayIndex }: WordBuilderGameProps) {
     };
   }, [repository, sessionId, words]);
 
-  const chooseLetter = (letter: string) => {
-    if (locked || selectedLetters.length >= round.missingIndexes.length) return;
-    const nextLetters = [...selectedLetters, letter];
-    setSelectedLetters(nextLetters);
-    if (nextLetters.length < round.missingIndexes.length) return;
+  useEffect(() => {
+    if (level === 'L3') playAudio();
+    return () => undefined;
+  }, [level, roundIndex]);
+
+  const changeLevel = (nextLevel: BuilderLevel) => {
+    if (nextLevel === level || locked) return;
+    setLevel(nextLevel);
+    setRoundIndex(0);
+    setSelectedTokens([]);
+    setFeedback(LEVEL_DESCRIPTIONS[nextLevel]);
+    setAudioReplayCount(0);
+  };
+
+  const chooseLetter = (token: LetterToken) => {
+    if (locked || complete || selectedTokens.some((selected) => selected.id === token.id)) return;
+    const nextTokens = [...selectedTokens, token];
+    setSelectedTokens(nextTokens);
+    const requiredCount = level === 'L1' ? round.missingIndexes.length : round.normalizedWord.length;
+    if (nextTokens.length < requiredCount) return;
 
     setLocked(true);
-    const expected = round.missingIndexes.map((index) => round.target.word[index].toLowerCase()).join('');
-    const actual = nextLetters.join('');
+    const actual = nextTokens.map((selected) => selected.letter).join('');
+    const expected = level === 'L1'
+      ? round.missingIndexes.map((index) => round.normalizedWord[index]).join('')
+      : round.normalizedWord;
     const isCorrect = actual === expected;
     const attempt = createGameAttempt({
-      id: `word-builder-${round.target.id}-${Date.now()}`,
+      id: `word-builder-${round.target.id}-${level}-${Date.now()}`,
       sessionId,
       gameType: 'word-builder',
       wordId: round.target.id,
@@ -97,7 +157,7 @@ export function WordBuilderGame({ words, dayIndex }: WordBuilderGameProps) {
       outcome: isCorrect ? 'independentCorrect' : 'wrong',
       attemptIndex: 1,
       hintsUsed: 0,
-      audioReplayCount: 0,
+      audioReplayCount,
       selectedAnswerId: round.target.id,
       occurredAt: new Date().toISOString(),
       contentVersion: round.target.contentVersion,
@@ -106,12 +166,13 @@ export function WordBuilderGame({ words, dayIndex }: WordBuilderGameProps) {
     void repository.recordAttempt(attempt).then(() => setSavedAttemptCount((count) => count + 1));
 
     if (!isCorrect) {
-      setFeedback('Almost! Let the letters bounce, then try again.');
+      setFeedback(level === 'L3' ? 'Listen once more and try again.' : 'Almost! Let the letters bounce, then try again.');
       setBouncing(true);
       window.setTimeout(() => {
         setBouncing(false);
-        setSelectedLetters([]);
+        setSelectedTokens([]);
         setLocked(false);
+        if (level === 'L3') playAudio();
       }, 550);
       return;
     }
@@ -122,7 +183,8 @@ export function WordBuilderGame({ words, dayIndex }: WordBuilderGameProps) {
         setComplete(true);
       } else {
         setRoundIndex((index) => index + 1);
-        setSelectedLetters([]);
+        setSelectedTokens([]);
+        setAudioReplayCount(0);
       }
       setLocked(false);
     }, 650);
@@ -153,26 +215,45 @@ export function WordBuilderGame({ words, dayIndex }: WordBuilderGameProps) {
       isComplete={complete}
       onExit={() => { window.location.href = '/mission'; }}
     >
-      <div className="word-builder-prompt" data-target-word-id={round.target.id}>
-        <p className="game-eyebrow">BUILD THE WORD · L1</p>
-        <h1 className={bouncing ? 'letters-bouncing' : ''} aria-live="polite">{maskedWord}</h1>
-        <p className="feedback-text" aria-live="polite">{feedback}</p>
-      </div>
-      <div className="letter-bank" aria-label="Letter choices">
-        {round.letters.map((letter) => (
+      <div className="word-builder-levels" aria-label="Word Builder level">
+        {(Object.keys(LEVEL_DESCRIPTIONS) as BuilderLevel[]).map((option) => (
           <button
-            key={letter}
-            className="letter-tile"
-            data-letter={letter}
+            className={option === level ? 'level-button level-button-active' : 'level-button'}
             type="button"
-            onClick={() => chooseLetter(letter)}
-            disabled={locked || selectedLetters.includes(letter)}
+            key={option}
+            onClick={() => changeLevel(option)}
+            aria-pressed={option === level}
           >
-            {letter}
+            {option}
           </button>
         ))}
       </div>
-      <p className="word-builder-hint">Fill the missing letters. No rush.</p>
+      <div className="word-builder-prompt" data-target-word-id={round.target.id} data-level={level}>
+        <p className="game-eyebrow">BUILD THE WORD · {level}</p>
+        <h1 className={bouncing ? 'letters-bouncing' : ''} aria-live="polite">{shownWord}</h1>
+        <p className="feedback-text" aria-live="polite">{feedback}</p>
+      </div>
+      {level === 'L3' && (
+        <button className="listen-button word-builder-listen" type="button" onClick={playAudio}>
+          Listen again
+        </button>
+      )}
+      <div className="letter-bank" aria-label="Letter choices">
+        {round.tokens.map((token) => (
+          <button
+            key={token.id}
+            className="letter-tile"
+            data-letter={token.letter}
+            data-token-id={token.id}
+            type="button"
+            onClick={() => chooseLetter(token)}
+            disabled={locked || selectedTokens.some((selected) => selected.id === token.id)}
+          >
+            {token.letter}
+          </button>
+        ))}
+      </div>
+      <p className="word-builder-hint">{LEVEL_DESCRIPTIONS[level]}</p>
     </GameShell>
   );
 }

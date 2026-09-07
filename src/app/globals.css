@@ -456,6 +456,40 @@ h1 {
   gap: 0.75rem;
 }
 
+.word-builder-levels {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.level-button {
+  min-width: 3.5rem;
+  min-height: 3rem;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.78);
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.level-button:hover,
+.level-button:focus-visible,
+.level-button-active {
+  border-color: var(--coral);
+  color: var(--ink);
+}
+
+.word-builder-listen {
+  display: block;
+  min-width: 9rem;
+  margin: 1rem auto 0;
+  padding: 0.75rem 1.25rem;
+  color: var(--ink);
+  background: #ffe08b;
+}
+
 .word-builder-prompt {
   display: flex;
   flex-direction: column;
