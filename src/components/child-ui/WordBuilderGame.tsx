@@ -39,8 +39,13 @@ function normalizeWord(word: string): string {
   return word.replace(/[^a-z]/gi, '').toLowerCase();
 }
 
-function shuffle<T>(items: T[]): T[] {
-  return [...items].sort((left, right) => String(left).localeCompare(String(right)));
+export function shuffle<T>(items: T[]): T[] {
+  const result = [...items];
+  for (let index = result.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [result[index], result[swapIndex]] = [result[swapIndex], result[index]];
+  }
+  return result;
 }
 
 function createRound(words: VocabularyEntry[], roundIndex: number, level: BuilderLevel): WordBuilderRound {
