@@ -22,6 +22,14 @@ test('parent dashboard reports real local learning metrics after a game', async 
   const dashboardPage = await context.newPage();
   dashboardPage.on('pageerror', (error) => pageErrors.push(error.message));
   await dashboardPage.goto('/parent');
+  await expect(dashboardPage.getByRole('heading', { name: /grown-up check/i })).toBeVisible();
+  const holdButton = dashboardPage.getByRole('button', { name: /hold to continue/i });
+  await holdButton.hover();
+  await dashboardPage.mouse.down();
+  await dashboardPage.waitForTimeout(2100);
+  await dashboardPage.mouse.up();
+  await expect(dashboardPage.getByRole('alertdialog')).toBeVisible();
+  await dashboardPage.getByRole('button', { name: /yes, open dashboard/i }).click();
   await expect(dashboardPage.getByRole('heading', { name: /learning dashboard/i })).toBeVisible();
   await expect(dashboardPage.getByText(/overall accuracy/i)).toBeVisible();
   await expect(dashboardPage.getByRole('article').filter({ hasText: 'GAME PERFORMANCE' }).getByText('G2 Picture Match', { exact: true })).toBeVisible();
