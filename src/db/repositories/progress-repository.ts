@@ -3,6 +3,7 @@ import { recordConfusion } from '@/domain/learning/confusion';
 import { applyAttemptToProgress } from '@/domain/learning/mastery';
 import { createEmptyWordProgress } from '@/domain/learning/types';
 import { wordQuestDb, type WordQuestDB } from '../db';
+import type { DataBackupPayload } from '@/content/data-backup';
 
 export interface ProgressRepository {
   getWordProgress(wordId: string): Promise<WordProgress | undefined>;
@@ -11,6 +12,8 @@ export interface ProgressRepository {
   getAllWordProgress(): Promise<WordProgress[]>;
   getAllReviewQueue(): Promise<import('@/domain/learning/types').ReviewQueueEntry[]>;
   getAllConfusionPairs(): Promise<ConfusionPair[]>;
+  importData(payload: DataBackupPayload): Promise<void>;
+  resetLearningData(): Promise<void>;
   recordAttempt(attempt: GameAttempt): Promise<WordProgress>;
 }
 
@@ -33,6 +36,19 @@ export function createProgressRepository(db: WordQuestDB = wordQuestDb): Progres
     },
     async getAllConfusionPairs(): Promise<ConfusionPair[]> {
       return db.confusionPairs.toArray();
+    },
+    async importData(payload: DataBackupPayload): Promise<void> {
+      await db.transaction('rw', [db.attempts, db.wordProgress], async () => {
+        await db.attempts.clear();
+        await db.wordProgress.clear();
+        await db.attempts.bulkPut(payload.attempts);
+        await db.wordProgress.bulkPut(payload.wordProgress);
+      });
+    },
+    async resetLearningData(): Promise<void> {
+      await db.transaction('rw', [db.attempts, db.wordProgress, db.reviewQueue, db.confusionPairs, db.sessions, db.rewards], async () => {
+        await Promise.all([db.attempts.clear(), db.wordProgress.clear(), db.reviewQueue.clear(), db.confusionPairs.clear(), db.sessions.clear(), db.rewards.clear()]);
+      });
     },
     async recordAttempt(attempt: GameAttempt): Promise<WordProgress> {
       return db.transaction('rw', db.wordProgress, db.attempts, db.reviewQueue, async () => {
