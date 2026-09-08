@@ -7,6 +7,7 @@ export interface ProgressRepository {
   getWordProgress(wordId: string): Promise<WordProgress | undefined>;
   getAttemptsBySession(sessionId: string): Promise<GameAttempt[]>;
   getAllAttempts(): Promise<GameAttempt[]>;
+  getAllWordProgress(): Promise<WordProgress[]>;
   recordAttempt(attempt: GameAttempt): Promise<WordProgress>;
 }
 
@@ -20,6 +21,9 @@ export function createProgressRepository(db: WordQuestDB = wordQuestDb): Progres
     },
     async getAllAttempts(): Promise<GameAttempt[]> {
       return db.attempts.toArray();
+    },
+    async getAllWordProgress(): Promise<WordProgress[]> {
+      return db.wordProgress.toArray();
     },
     async recordAttempt(attempt: GameAttempt): Promise<WordProgress> {
       return db.transaction('rw', db.wordProgress, db.attempts, async () => {

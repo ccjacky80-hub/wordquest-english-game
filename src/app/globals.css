@@ -975,3 +975,49 @@ h1 {
     font-size: 0.78rem;
   }
 }
+
+/* Parent dashboard: deliberately separate from the child playground UI. */
+.parent-shell { min-height: 100dvh; padding: clamp(1.5rem, 4vw, 4rem); color: #172b4d; background: #f4f6f9; font-family: Arial, Helvetica, sans-serif; }
+.parent-header, .parent-overview, .parent-grid, .parent-panel { width: min(100%, 76rem); margin-inline: auto; }
+.parent-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 2rem; margin-bottom: 2rem; }
+.parent-header h1 { max-width: none; margin: .4rem 0 .5rem; color: #122542; font-family: Arial, Helvetica, sans-serif; font-size: clamp(2rem, 4vw, 3.3rem); letter-spacing: -.045em; line-height: 1; }
+.parent-kicker { margin: 0; color: #63738b; font-size: .72rem; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
+.parent-muted { color: #68788f; }
+.parent-child-link { min-height: 3rem; display: inline-flex; align-items: center; padding: 0 1rem; border: 1px solid #d5dce6; border-radius: .5rem; color: #2c5c93; background: #fff; font-weight: 700; text-decoration: none; }
+.parent-overview { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1rem; }
+.parent-metric, .parent-panel { border: 1px solid #dce2eb; border-radius: .8rem; background: #fff; box-shadow: 0 .5rem 1.5rem rgba(31, 49, 75, .06); }
+.parent-metric { min-height: 9rem; display: flex; flex-direction: column; justify-content: center; padding: 1.4rem; }
+.parent-metric span { color: #66758b; font-size: .85rem; font-weight: 700; }
+.parent-metric strong { margin: .35rem 0; color: #172b4d; font-size: 2.8rem; letter-spacing: -.06em; }
+.parent-metric small { font-size: 1.2rem; letter-spacing: 0; }
+.parent-metric em { color: #718197; font-size: .8rem; font-style: normal; }
+.parent-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+.parent-panel { padding: 1.4rem; }
+.parent-wide { min-width: 0; }
+.parent-panel-heading { display: flex; justify-content: space-between; gap: 1rem; margin-bottom: 1.2rem; }
+.parent-panel h2 { margin: .35rem 0 0; color: #172b4d; font-family: Arial, Helvetica, sans-serif; font-size: 1.25rem; }
+.parent-table-note { color: #8793a5; font-size: .75rem; }
+.game-performance-list { display: grid; gap: 1rem; }
+.game-performance-row { display: grid; grid-template-columns: minmax(10rem, 1fr) 3rem 1fr; align-items: center; gap: 1rem; }
+.game-performance-row strong, .game-performance-row span { display: block; }
+.game-performance-row strong { color: #243b5c; font-size: .9rem; }
+.game-performance-row span { margin-top: .25rem; color: #8290a3; font-size: .75rem; }
+.game-performance-row b { color: #2c6b62; font-size: .9rem; text-align: right; }
+.parent-bar { height: .45rem; overflow: hidden; border-radius: 999px; background: #e8edf3; }
+.parent-bar i { display: block; height: 100%; border-radius: inherit; background: #4c9588; }
+.activity-list { display: grid; gap: 1rem; margin: 1.2rem 0 0; padding: 0; list-style: none; }
+.activity-list li { display: flex; align-items: flex-start; gap: .7rem; }
+.activity-dot { width: .55rem; height: .55rem; flex: 0 0 auto; margin-top: .3rem; border-radius: 50%; background: #4c9588; }
+.activity-dot.is-wrong { background: #d68d5b; }
+.activity-list strong, .activity-list span { display: block; }
+.activity-list strong { color: #2a3e5d; font-size: .82rem; }
+.activity-list span { margin-top: .2rem; color: #8290a3; font-size: .75rem; }
+.parent-table-wrap { overflow-x: auto; }
+.parent-table { width: 100%; border-collapse: collapse; font-size: .83rem; }
+.parent-table th { padding: .7rem; border-bottom: 1px solid #dce2eb; color: #7a879a; font-size: .7rem; letter-spacing: .07em; text-align: left; text-transform: uppercase; white-space: nowrap; }
+.parent-table td { padding: .85rem .7rem; border-bottom: 1px solid #edf0f4; color: #54657c; white-space: nowrap; }
+.parent-table td strong { color: #213957; }
+.mastery-pill { display: inline-flex; padding: .3rem .55rem; border-radius: 999px; color: #fff; background: #8491a3; font-size: .7rem; font-weight: 800; }
+.mastery-3, .mastery-4 { background: #3d8290; }
+.mastery-5 { background: #39785e; }
+@media (max-width: 720px) { .parent-header { flex-direction: column; } .parent-overview { grid-template-columns: 1fr; } .parent-grid { grid-template-columns: 1fr; } .game-performance-row { grid-template-columns: minmax(8rem, 1fr) 3rem; } .game-performance-row .parent-bar { grid-column: 1 / -1; } }
