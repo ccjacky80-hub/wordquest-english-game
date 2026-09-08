@@ -51,6 +51,9 @@ export default function MissionPage() {
         <Link className="secondary-action wide-action" href="/play/word-builder">
           Build words
         </Link>
+        <Link className="secondary-action wide-action" href="/play/put-it-somewhere">
+          Put it somewhere
+        </Link>
       </div>
       <p className="mission-note">You can listen again or look again whenever you need.</p>
     </ChildPageFrame>

@@ -555,6 +555,88 @@ h1 {
   text-align: center;
 }
 
+.drag-instruction {
+  max-width: 48rem;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.drag-instruction h1 {
+  margin: 1rem 0;
+  font-size: clamp(1.8rem, 5vw, 3.8rem);
+  line-height: 1.08;
+}
+
+.drag-board {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: center;
+  gap: 2rem;
+  max-width: 48rem;
+  margin: 2rem auto 0;
+}
+
+.drag-source,
+.drop-target {
+  min-height: 16rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 1rem;
+  border-radius: 1.5rem;
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.drag-source {
+  border: 2px solid var(--sky);
+  color: var(--ink);
+  background: #fff;
+  cursor: grab;
+  touch-action: none;
+}
+
+.drag-source:active,
+.drag-source-active {
+  cursor: grabbing;
+  opacity: 0.72;
+}
+
+.drag-source img,
+.drop-target img {
+  object-fit: cover;
+  border-radius: 1rem;
+}
+
+.drop-target {
+  border: 3px dashed var(--coral);
+  color: var(--coral-dark);
+  background: rgba(255, 224, 139, 0.38);
+}
+
+.drop-target-over {
+  border-style: solid;
+  background: rgba(185, 229, 245, 0.72);
+}
+
+.drop-target-distractor {
+  min-height: 5rem;
+  border-color: rgba(85, 112, 134, 0.45);
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.62);
+}
+
+.drag-overlay {
+  padding: 1rem 1.5rem;
+  border-radius: 1rem;
+  color: var(--ink);
+  background: #ffe08b;
+  box-shadow: 0 0.75rem 1.5rem rgba(24, 50, 75, 0.2);
+  font-weight: 700;
+}
+
 .picture-match-prompt {
   display: flex;
   flex-direction: column;
