@@ -1039,4 +1039,11 @@ h1 {
 .mastery-pill { display: inline-flex; padding: .3rem .55rem; border-radius: 999px; color: #fff; background: #8491a3; font-size: .7rem; font-weight: 800; }
 .mastery-3, .mastery-4 { background: #3d8290; }
 .mastery-5 { background: #39785e; }
+.confusion-list { display: grid; gap: .8rem; margin: 0; padding: 0; list-style: none; }
+.confusion-list li { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; padding: .85rem 0; border-bottom: 1px solid #edf0f4; }
+.confusion-list li:last-child { border-bottom: 0; }
+.confusion-list strong, .confusion-list span { display: block; }
+.confusion-list strong { color: #243b5c; font-size: .9rem; }
+.confusion-list strong span { display: inline; margin: 0 .35rem; color: #c28a57; }
+.confusion-list li > span { color: #8290a3; font-size: .75rem; text-align: right; }
 @media (max-width: 720px) { .parent-header { flex-direction: column; } .parent-overview { grid-template-columns: 1fr; } .parent-grid { grid-template-columns: 1fr; } .game-performance-row { grid-template-columns: minmax(8rem, 1fr) 3rem; } .game-performance-row .parent-bar { grid-column: 1 / -1; } }

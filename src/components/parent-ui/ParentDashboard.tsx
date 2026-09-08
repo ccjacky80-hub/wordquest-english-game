@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { createProgressRepository } from '@/db/repositories/progress-repository';
 import { buildParentDashboardSnapshot, gameLabel, masteryLabel, type ParentDashboardSnapshot } from '@/content/parent-dashboard';
+import { getVocabularyEntry } from '@/content/loader';
 
 function formatDate(value?: string): string { return value ? new Intl.DateTimeFormat('en', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }).format(new Date(value)) : 'Not yet'; }
 
@@ -22,5 +23,6 @@ export function ParentDashboard() {
       <article className="parent-panel"><p className="parent-kicker">RECENT ACTIVITY</p><h2>Latest practice</h2><ol className="activity-list">{snapshot.recentActivity.length ? snapshot.recentActivity.slice(0, 6).map((attempt) => <li key={attempt.id}><span className={`activity-dot ${attempt.outcome === 'wrong' ? 'is-wrong' : ''}`} /><div><strong>{gameLabel(attempt.gameType)}</strong><span>{attempt.outcome === 'wrong' ? 'Needs another try' : 'Correct response'} · {formatDate(attempt.occurredAt)}</span></div></li>) : <li className="parent-muted">No activity yet.</li>}</ol></article>
     </section>
     <section className="parent-panel"><div className="parent-panel-heading"><div><p className="parent-kicker">VOCABULARY MASTERY</p><h2>Words in progress</h2></div><span className="parent-table-note">Independent · assisted · wrong</span></div><div className="parent-table-wrap"><table className="parent-table"><thead><tr><th>Word</th><th>Mastery</th><th>Independent</th><th>Assisted</th><th>Wrong</th><th>Last seen</th></tr></thead><tbody>{snapshot.words.length ? snapshot.words.map((word) => <tr key={word.wordId}><td><strong>{word.word}</strong></td><td><span className={`mastery-pill mastery-${word.masteryLevel}`}>{masteryLabel(word.masteryLevel)}</span></td><td>{word.independentCorrectCount}</td><td>{word.assistedCorrectCount}</td><td>{word.wrongCount}</td><td>{formatDate(word.lastSeenAt)}</td></tr>) : <tr><td colSpan={6} className="parent-muted">Complete a game to see vocabulary evidence here.</td></tr>}</tbody></table></div></section>
+    <section className="parent-panel confusion-panel"><div className="parent-panel-heading"><div><p className="parent-kicker">CONFUSION WATCH</p><h2>Recently mixed up</h2></div><span className="parent-table-note">Repeated wrong selections</span></div>{snapshot.confusionPairs.length ? <ul className="confusion-list">{snapshot.confusionPairs.slice(0, 5).map((pair) => <li key={pair.pairKey}><strong>{getVocabularyEntry(pair.wordAId)?.word ?? pair.wordAId} <span>↔</span> {getVocabularyEntry(pair.wordBId)?.word ?? pair.wordBId}</strong><span>{pair.count} mix-ups · last seen {formatDate(pair.lastOccurredAt)}</span></li>)}</ul> : <p className="parent-muted">No repeated mix-ups yet.</p>}</section>
   </main>;
 }
