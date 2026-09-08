@@ -235,6 +235,8 @@ export function WordBuilderGame({ words, dayIndex, defaultLevel = 'L1' }: WordBu
       attempts={attempts}
       isComplete={complete}
       onExit={() => { window.location.href = '/mission'; }}
+      sessionId={sessionId}
+      gameType="word-builder"
     >
       <div className="word-builder-levels" aria-label="Word Builder level">
         {(Object.keys(LEVEL_DESCRIPTIONS) as BuilderLevel[]).map((option) => (

@@ -4,6 +4,8 @@ import { applyAttemptToProgress } from '@/domain/learning/mastery';
 import { createEmptyWordProgress } from '@/domain/learning/types';
 import { wordQuestDb, type WordQuestDB } from '../db';
 import type { DataBackupPayload } from '@/content/data-backup';
+import { eventsForAttempt } from '@/content/local-telemetry';
+import type { LocalEvent } from '@/domain/learning/types';
 
 export interface ProgressRepository {
   getWordProgress(wordId: string): Promise<WordProgress | undefined>;
@@ -12,6 +14,8 @@ export interface ProgressRepository {
   getAllWordProgress(): Promise<WordProgress[]>;
   getAllReviewQueue(): Promise<import('@/domain/learning/types').ReviewQueueEntry[]>;
   getAllConfusionPairs(): Promise<ConfusionPair[]>;
+  getAllLocalEvents(): Promise<LocalEvent[]>;
+  recordEvent(event: LocalEvent): Promise<void>;
   importData(payload: DataBackupPayload): Promise<void>;
   resetLearningData(): Promise<void>;
   recordAttempt(attempt: GameAttempt): Promise<WordProgress>;
@@ -37,6 +41,12 @@ export function createProgressRepository(db: WordQuestDB = wordQuestDb): Progres
     async getAllConfusionPairs(): Promise<ConfusionPair[]> {
       return db.confusionPairs.toArray();
     },
+    async getAllLocalEvents(): Promise<LocalEvent[]> {
+      return db.localEvents.orderBy('occurredAt').reverse().toArray();
+    },
+    async recordEvent(event: LocalEvent): Promise<void> {
+      await db.localEvents.put(event);
+    },
     async importData(payload: DataBackupPayload): Promise<void> {
       await db.transaction('rw', [db.attempts, db.wordProgress], async () => {
         await db.attempts.clear();
@@ -46,16 +56,17 @@ export function createProgressRepository(db: WordQuestDB = wordQuestDb): Progres
       });
     },
     async resetLearningData(): Promise<void> {
-      await db.transaction('rw', [db.attempts, db.wordProgress, db.reviewQueue, db.confusionPairs, db.sessions, db.rewards], async () => {
-        await Promise.all([db.attempts.clear(), db.wordProgress.clear(), db.reviewQueue.clear(), db.confusionPairs.clear(), db.sessions.clear(), db.rewards.clear()]);
+      await db.transaction('rw', [db.attempts, db.wordProgress, db.reviewQueue, db.confusionPairs, db.sessions, db.rewards, db.localEvents], async () => {
+        await Promise.all([db.attempts.clear(), db.wordProgress.clear(), db.reviewQueue.clear(), db.confusionPairs.clear(), db.sessions.clear(), db.rewards.clear(), db.localEvents.clear()]);
       });
     },
     async recordAttempt(attempt: GameAttempt): Promise<WordProgress> {
-      return db.transaction('rw', db.wordProgress, db.attempts, db.reviewQueue, async () => {
+      return db.transaction('rw', [db.wordProgress, db.attempts, db.reviewQueue, db.localEvents], async () => {
         const current = (await db.wordProgress.get(attempt.wordId)) ?? createEmptyWordProgress(attempt.wordId);
         const updated = applyAttemptToProgress(current, attempt);
         await db.attempts.put(attempt);
         await db.wordProgress.put(updated);
+        await db.localEvents.bulkPut(eventsForAttempt(attempt, updated));
         await db.reviewQueue.put({ wordId: updated.wordId, stage: updated.currentReviewStage, dueAt: updated.nextReviewAt ?? attempt.occurredAt, lastQuality: updated.lastQuality, reason: updated.lastQuality < 0.4 ? 'low-quality' : current.attemptCount === 0 ? 'new-word' : 'standard-review' });
         if (attempt.confusionWithWordId) {
           const pairKey = [attempt.wordId, attempt.confusionWithWordId].sort().join(':');

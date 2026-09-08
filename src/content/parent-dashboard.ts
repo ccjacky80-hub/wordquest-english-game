@@ -4,6 +4,8 @@ import { getVocabularyEntry } from './loader';
 import type { ConfusionPair, GameAttempt, WordProgress } from '@/domain/learning/types';
 import { aggregateConfusionPairs } from './confusion-summary';
 import { getProblemWords, groupVocabulary, parentVocabularyGroup, type ParentVocabularyGroup, type ProblemWord } from './parent-vocabulary';
+import { recentLocalEvents, summarizeLocalEvents } from './local-telemetry';
+import type { LocalEvent } from '@/domain/learning/types';
 
 export interface GamePerformance {
   gameType: string;
@@ -34,6 +36,7 @@ export interface ParentDashboardSnapshot {
   confusionPairs: ConfusionPair[];
   vocabularyGroups: Record<ParentVocabularyGroup, WordProgress[]>;
   problemWords: ProblemWord[];
+  localEventSummary: ReturnType<typeof summarizeLocalEvents>;
 }
 
 const GAME_LABELS: Record<string, string> = {
@@ -47,6 +50,7 @@ const GAME_LABELS: Record<string, string> = {
 export function buildParentDashboardSnapshot(
   attempts: readonly GameAttempt[],
   progress: readonly WordProgress[],
+  localEvents: readonly LocalEvent[] = [],
 ): ParentDashboardSnapshot {
   const totalAttempts = attempts.length;
   const totalCorrect = attempts.filter((attempt) => attempt.outcome !== 'wrong').length;
@@ -59,7 +63,7 @@ export function buildParentDashboardSnapshot(
   const words = progress.map((entry) => ({ wordId: entry.wordId, word: getVocabularyEntry(entry.wordId)?.word ?? entry.wordId, masteryLevel: entry.masteryLevel, independentCorrectCount: entry.independentCorrectCount, assistedCorrectCount: entry.assistedCorrectCount, wrongCount: entry.wrongCount, lastSeenAt: entry.lastSeenAt })).sort((a, b) => b.masteryLevel - a.masteryLevel || a.word.localeCompare(b.word));
   const recentActivity = [...attempts].sort((a, b) => b.occurredAt.localeCompare(a.occurredAt)).slice(0, 10);
   const now = new Date().toISOString();
-  return { dailyProgress: computeDailyProgress(attempts), overallAccuracy: totalAttempts ? Math.round((totalCorrect / totalAttempts) * 100) : 0, totalAttempts, totalCorrect, gamePerformance, words, recentActivity, confusionPairs: aggregateConfusionPairs(attempts), vocabularyGroups: groupVocabulary(progress, now), problemWords: getProblemWords(progress, attempts, now) };
+  return { dailyProgress: computeDailyProgress(attempts), overallAccuracy: totalAttempts ? Math.round((totalCorrect / totalAttempts) * 100) : 0, totalAttempts, totalCorrect, gamePerformance, words, recentActivity, confusionPairs: aggregateConfusionPairs(attempts), vocabularyGroups: groupVocabulary(progress, now), problemWords: getProblemWords(progress, attempts, now), localEventSummary: summarizeLocalEvents(recentLocalEvents(localEvents, now)) };
 }
 
 export function gameLabel(gameType: string): string { return GAME_LABELS[gameType] ?? gameType; }

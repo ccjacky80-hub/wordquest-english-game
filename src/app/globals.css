@@ -1056,4 +1056,7 @@ h1 {
 .confusion-list strong { color: #243b5c; font-size: .9rem; }
 .confusion-list strong span { display: inline; margin: 0 .35rem; color: #c28a57; }
 .confusion-list li > span { color: #8290a3; font-size: .75rem; text-align: right; }
+.telemetry-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); gap: .6rem; }
+.telemetry-summary div { display: flex; justify-content: space-between; padding: .7rem; border: 1px solid #e1e6ed; border-radius: .45rem; color: #63738b; font-size: .75rem; text-transform: capitalize; }
+.telemetry-summary b { color: #2c6b62; }
 @media (max-width: 720px) { .parent-header { flex-direction: column; } .parent-overview { grid-template-columns: 1fr; } .parent-grid { grid-template-columns: 1fr; } .game-performance-row { grid-template-columns: minmax(8rem, 1fr) 3rem; } .game-performance-row .parent-bar { grid-column: 1 / -1; } .vocabulary-group-tabs { grid-template-columns: repeat(2, 1fr); } }
