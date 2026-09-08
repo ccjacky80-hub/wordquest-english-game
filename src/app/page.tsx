@@ -36,6 +36,7 @@ export default function HomePage() {
           </div>
         </div>
         <p className="status-note">Your learning progress stays on this device.</p>
+        <Link className="parent-entry-link" href="/parent" aria-label="Caregiver dashboard">Caregiver view</Link>
       </section>
     </main>
   );

@@ -977,6 +977,25 @@ h1 {
 }
 
 /* Parent dashboard: deliberately separate from the child playground UI. */
+.parent-entry-link { display: inline-block; margin-top: 1.5rem; color: rgba(24, 50, 75, 0.62); font-size: 0.72rem; text-decoration: none; }
+.parent-entry-link:hover, .parent-entry-link:focus-visible { color: var(--coral-dark); text-decoration: underline; }
+.parent-gate-shell { min-height: 100dvh; display: grid; place-items: center; padding: 1.5rem; color: #172b4d; background: #f4f6f9; font-family: Arial, Helvetica, sans-serif; }
+.parent-gate-card { width: min(100%, 32rem); padding: clamp(1.5rem, 5vw, 3rem); border: 1px solid #dce2eb; border-radius: .8rem; background: #fff; box-shadow: 0 1rem 2.5rem rgba(31, 49, 75, .1); text-align: center; }
+.parent-gate-card h1 { max-width: none; margin: .5rem 0 1rem; color: #122542; font-family: Arial, Helvetica, sans-serif; font-size: clamp(2rem, 7vw, 3.4rem); letter-spacing: -.045em; }
+.parent-gate-copy { color: #68788f; line-height: 1.55; }
+.parent-gate-hold { position: relative; width: 100%; min-height: 4rem; overflow: hidden; margin-top: 1.5rem; border: 0; border-radius: .5rem; color: #fff; background: #2c5c93; cursor: pointer; font-weight: 800; touch-action: none; }
+.parent-gate-hold:focus-visible { outline: 3px solid #9bc2ef; outline-offset: 3px; }
+.parent-gate-progress { position: absolute; inset: 0 auto 0 0; background: #4c9588; transition: width 40ms linear; }
+.parent-gate-hold > span:last-child { position: relative; }
+.parent-gate-status { min-height: 1.2rem; margin: .8rem 0 0; color: #8290a3; font-size: .8rem; }
+.parent-gate-dialog-backdrop { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; padding: 1.5rem; background: rgba(18, 37, 66, .45); }
+.parent-gate-dialog { width: min(100%, 28rem); padding: 1.5rem; border-radius: .8rem; background: #fff; box-shadow: 0 1rem 3rem rgba(0, 0, 0, .2); }
+.parent-gate-dialog h2 { margin: .5rem 0; color: #122542; font-family: Arial, Helvetica, sans-serif; font-size: 1.4rem; }
+.parent-gate-dialog p:not(.parent-kicker) { color: #68788f; line-height: 1.5; }
+.parent-gate-actions { display: grid; gap: .7rem; margin-top: 1.3rem; }
+.parent-gate-confirm, .parent-gate-cancel { min-height: 3rem; border-radius: .5rem; cursor: pointer; font-weight: 700; }
+.parent-gate-confirm { border: 0; color: #fff; background: #2c5c93; }
+.parent-gate-cancel { border: 1px solid #d5dce6; color: #52657e; background: #fff; }
 .parent-shell { min-height: 100dvh; padding: clamp(1.5rem, 4vw, 4rem); color: #172b4d; background: #f4f6f9; font-family: Arial, Helvetica, sans-serif; }
 .parent-header, .parent-overview, .parent-grid, .parent-panel { width: min(100%, 76rem); margin-inline: auto; }
 .parent-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 2rem; margin-bottom: 2rem; }
