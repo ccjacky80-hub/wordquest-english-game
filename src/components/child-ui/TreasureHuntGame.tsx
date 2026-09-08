@@ -8,6 +8,7 @@ import { createGameAttempt } from '@/games/game-attempt';
 import type { GameAttempt } from '@/domain/learning/types';
 import type { VocabularyEntry } from '@/content/schemas';
 import { getDailySessionId } from '@/content/progress-scheduler';
+import { getAttemptProtectionState, outcomeAfterProtectedCorrect, shouldEnterSoftRetest } from '@/domain/learning/attempt-protection';
 
 interface TreasureHuntGameProps {
   words: VocabularyEntry[];
@@ -39,6 +40,8 @@ export function TreasureHuntGame({ words, dayIndex }: TreasureHuntGameProps) {
   const repository = useMemo(() => createProgressRepository(), []);
   const sessionId = getDailySessionId(dayIndex, 'treasure-hunt');
   const round = createRound(words, roundIndex);
+  const failedAttempts = attempts.filter((attempt) => attempt.wordId === round.target.id && attempt.outcome === 'wrong').length;
+  const protection = getAttemptProtectionState(failedAttempts);
 
   const playAudio = useCallback(() => {
     if (!round.target.audioPath) return;
@@ -82,9 +85,13 @@ export function TreasureHuntGame({ words, dayIndex }: TreasureHuntGameProps) {
       wordId: round.target.id,
       relatedWordIds: round.target.relatedWordIds,
       promptType: 'audio-to-object',
-      outcome: isCorrect ? 'independentCorrect' : 'wrong',
-      attemptIndex: 1,
-      hintsUsed: 0,
+      outcome: isCorrect
+        ? failedAttempts > 0
+          ? outcomeAfterProtectedCorrect(failedAttempts)
+          : 'independentCorrect'
+        : failedAttempts + 1 >= 3 ? 'revealed' : 'wrong',
+      attemptIndex: failedAttempts + 1,
+      hintsUsed: protection.stage === 'hint' || protection.answerRevealed ? 1 : 0,
       audioReplayCount: 0,
       selectedAnswerId: choice.id,
       confusionWithWordId: isCorrect ? undefined : choice.id,
@@ -106,9 +113,23 @@ export function TreasureHuntGame({ words, dayIndex }: TreasureHuntGameProps) {
         setLocked(false);
       }, 650);
     } else {
-      setFeedback('Try this one. Listen again.');
-      playAudio();
-      window.setTimeout(() => setLocked(false), 500);
+      const nextProtection = getAttemptProtectionState(failedAttempts + 1);
+      if (shouldEnterSoftRetest(failedAttempts + 1)) {
+        setFeedback('We will revisit this animal in a few minutes. Let us keep exploring.');
+        window.setTimeout(() => {
+          if (roundIndex + 1 >= words.length) setComplete(true);
+          else setRoundIndex((index) => index + 1);
+          setLocked(false);
+        }, 650);
+      } else {
+        setFeedback(nextProtection.stage === 'revealed'
+          ? `Here is the answer: ${round.target.word}. We will revisit it soon.`
+          : nextProtection.stage === 'hint'
+            ? `A small clue: listen for ${round.target.word}.`
+            : 'Try this one. Listen again.');
+        playAudio();
+        window.setTimeout(() => setLocked(false), 500);
+      }
     }
     void updatedProgress;
   };

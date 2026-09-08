@@ -19,6 +19,7 @@ import { createProgressRepository } from '@/db/repositories/progress-repository'
 import { createGameAttempt } from '@/games/game-attempt';
 import { getDailySessionId } from '@/content/progress-scheduler';
 import type { GameAttempt } from '@/domain/learning/types';
+import { getAttemptProtectionState, outcomeAfterProtectedCorrect, shouldEnterSoftRetest } from '@/domain/learning/attempt-protection';
 import type { DragMission } from '@/content/drag-missions';
 
 interface PutItSomewhereGameProps {
@@ -80,6 +81,8 @@ export function PutItSomewhereGame({ missions, dayIndex }: PutItSomewhereGamePro
   );
   const sessionId = getDailySessionId(dayIndex, 'put-it-somewhere');
   const mission = missions[roundIndex];
+  const failedAttempts = attempts.filter((attempt) => attempt.wordId === mission.source.id && attempt.outcome === 'wrong').length;
+  const protection = getAttemptProtectionState(failedAttempts);
 
   const handleDrop = async (targetId: string) => {
     const expectedTarget = mission.targetWordId ?? mission.targetLabel;
@@ -95,9 +98,13 @@ export function PutItSomewhereGame({ missions, dayIndex }: PutItSomewhereGamePro
       wordId: mission.source.id,
       relatedWordIds: mission.source.relatedWordIds,
       promptType: 'instruction-action',
-      outcome: isCorrect ? 'independentCorrect' : 'wrong',
-      attemptIndex: 1,
-      hintsUsed: 0,
+      outcome: isCorrect
+        ? failedAttempts > 0
+          ? outcomeAfterProtectedCorrect(failedAttempts)
+          : 'independentCorrect'
+        : failedAttempts + 1 >= 3 ? 'revealed' : 'wrong',
+      attemptIndex: failedAttempts + 1,
+      hintsUsed: protection.stage === 'hint' || protection.answerRevealed ? 1 : 0,
       audioReplayCount: 0,
       selectedAnswerId: targetId,
       occurredAt: new Date().toISOString(),
@@ -107,8 +114,21 @@ export function PutItSomewhereGame({ missions, dayIndex }: PutItSomewhereGamePro
     void repository.recordAttempt(attempt);
 
     if (!isCorrect) {
-      setFeedback('Nice try. Read the sentence again and try the other place.');
-      window.setTimeout(() => { setLocked(false); handledDropRef.current = false; }, 500);
+      const nextProtection = getAttemptProtectionState(failedAttempts + 1);
+      setFeedback(shouldEnterSoftRetest(failedAttempts + 1)
+        ? 'We will revisit this instruction in a few minutes. Let us keep going.'
+        : nextProtection.stage === 'revealed'
+          ? `Here is the answer: ${mission.targetLabel}. We will revisit it soon.`
+          : nextProtection.stage === 'hint'
+            ? 'A small clue: look at the words again.'
+            : 'Nice try. Read the sentence again and try the other place.');
+      window.setTimeout(() => {
+        if (shouldEnterSoftRetest(failedAttempts + 1)) {
+          if (roundIndex + 1 >= missions.length) setComplete(true);
+          else setRoundIndex((index) => index + 1);
+        }
+        setLocked(false); handledDropRef.current = false;
+      }, 500);
       return;
     }
 

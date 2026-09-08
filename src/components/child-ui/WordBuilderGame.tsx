@@ -6,6 +6,7 @@ import { GameShell } from '@/components/common/GameShell';
 import { createProgressRepository } from '@/db/repositories/progress-repository';
 import { createGameAttempt } from '@/games/game-attempt';
 import { getDailySessionId } from '@/content/progress-scheduler';
+import { getAttemptProtectionState, outcomeAfterProtectedCorrect, shouldEnterSoftRetest } from '@/domain/learning/attempt-protection';
 import type { GameAttempt } from '@/domain/learning/types';
 import type { VocabularyEntry } from '@/content/schemas';
 
@@ -101,6 +102,8 @@ export function WordBuilderGame({ words, dayIndex, defaultLevel = 'L1' }: WordBu
   const sessionId = getDailySessionId(dayIndex, 'word-builder');
   const round = createRound(words, roundIndex, level);
   const shownWord = displayWord(round, level, selectedTokens);
+  const failedAttempts = attempts.filter((attempt) => attempt.wordId === round.target.id && attempt.outcome === 'wrong').length;
+  const protection = getAttemptProtectionState(failedAttempts);
 
   const playAudio = () => {
     if (level !== 'L3' || !round.target.audioPath) return;
@@ -159,9 +162,13 @@ export function WordBuilderGame({ words, dayIndex, defaultLevel = 'L1' }: WordBu
       wordId: round.target.id,
       relatedWordIds: round.target.relatedWordIds,
       promptType: 'word-build',
-      outcome: isCorrect ? 'independentCorrect' : 'wrong',
-      attemptIndex: 1,
-      hintsUsed: 0,
+      outcome: isCorrect
+        ? failedAttempts > 0
+          ? outcomeAfterProtectedCorrect(failedAttempts)
+          : 'independentCorrect'
+        : failedAttempts + 1 >= 3 ? 'revealed' : 'wrong',
+      attemptIndex: failedAttempts + 1,
+      hintsUsed: protection.stage === 'hint' || protection.answerRevealed ? 1 : 0,
       audioReplayCount,
       selectedAnswerId: round.target.id,
       occurredAt: new Date().toISOString(),
@@ -171,12 +178,21 @@ export function WordBuilderGame({ words, dayIndex, defaultLevel = 'L1' }: WordBu
     void repository.recordAttempt(attempt).then(() => setSavedAttemptCount((count) => count + 1));
 
     if (!isCorrect) {
-      setFeedback(level === 'L3' ? 'Listen once more and try again.' : 'Almost! Let the letters bounce, then try again.');
+      const nextProtection = getAttemptProtectionState(failedAttempts + 1);
+      setFeedback(shouldEnterSoftRetest(failedAttempts + 1)
+        ? 'We will revisit this word in a few minutes. Let us keep going.'
+        : nextProtection.stage === 'revealed'
+          ? `Here is the answer: ${round.target.word}. We will revisit it soon.`
+          : level === 'L3' ? 'Listen once more and try again.' : 'Almost! Let the letters bounce, then try again.');
       setBouncing(true);
       window.setTimeout(() => {
         setBouncing(false);
         setSelectedTokens([]);
         setLocked(false);
+        if (shouldEnterSoftRetest(failedAttempts + 1)) {
+          if (roundIndex + 1 >= words.length) setComplete(true);
+          else setRoundIndex((index) => index + 1);
+        }
         if (level === 'L3') playAudio();
       }, 550);
       return;

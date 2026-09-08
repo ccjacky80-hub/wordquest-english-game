@@ -8,6 +8,7 @@ import { createGameAttempt } from '@/games/game-attempt';
 import type { GameAttempt } from '@/domain/learning/types';
 import type { VocabularyEntry } from '@/content/schemas';
 import { getDailySessionId } from '@/content/progress-scheduler';
+import { getAttemptProtectionState, outcomeAfterProtectedCorrect, shouldEnterSoftRetest } from '@/domain/learning/attempt-protection';
 
 interface PictureMatchGameProps {
   words: VocabularyEntry[];
@@ -45,6 +46,7 @@ export function PictureMatchGame({ words, dayIndex, optionCount = 4 }: PictureMa
   const [locked, setLocked] = useState(false);
   const [complete, setComplete] = useState(false);
   const [savedAttemptCount, setSavedAttemptCount] = useState(0);
+  const protection = getAttemptProtectionState(roundAttempts);
   const repository = useMemo(() => createProgressRepository(), []);
   const sessionId = getDailySessionId(dayIndex, 'picture-match');
   const round = createRound(words, roundIndex, optionCount);
@@ -82,11 +84,11 @@ export function PictureMatchGame({ words, dayIndex, optionCount = 4 }: PictureMa
       promptType: 'image-to-word',
       outcome: isCorrect
         ? roundAttempts > 0
-          ? 'correctAfterHint'
+          ? outcomeAfterProtectedCorrect(roundAttempts)
           : 'independentCorrect'
-        : 'wrong',
+        : roundAttempts + 1 >= 3 ? 'revealed' : 'wrong',
       attemptIndex: attemptNumber,
-      hintsUsed: roundAttempts > 0 ? 1 : 0,
+      hintsUsed: protection.stage === 'hint' || protection.answerRevealed ? 1 : 0,
       audioReplayCount: 0,
       selectedAnswerId: choice.id,
       confusionWithWordId: isCorrect ? undefined : choice.id,
@@ -99,12 +101,23 @@ export function PictureMatchGame({ words, dayIndex, optionCount = 4 }: PictureMa
 
     if (!isCorrect) {
       setRoundAttempts(attemptNumber);
-      setFeedback(
-        attemptNumber >= 2
-          ? `Here is a clue: look for ${round.target.word}. Try again!`
-          : 'Not this one. Look closely and try again.',
-      );
-      window.setTimeout(() => setLocked(false), 450);
+      const nextProtection = getAttemptProtectionState(attemptNumber);
+      if (shouldEnterSoftRetest(attemptNumber)) {
+        setFeedback('We will come back to this word in a few minutes. Let us keep going.');
+        window.setTimeout(() => {
+          setRoundIndex((index) => index + 1);
+          setRoundAttempts(0);
+          setSelectedId(undefined);
+          setLocked(false);
+        }, 650);
+      } else {
+        setFeedback(nextProtection.stage === 'revealed'
+          ? `Here is the answer: ${round.target.word}. We will revisit it soon.`
+          : nextProtection.stage === 'hint'
+            ? `Here is a clue: look for ${round.target.word}. Try again!`
+            : 'Not this one. Look closely and try again.');
+        window.setTimeout(() => setLocked(false), 450);
+      }
       return;
     }
 
@@ -120,6 +133,7 @@ export function PictureMatchGame({ words, dayIndex, optionCount = 4 }: PictureMa
         setRoundIndex((index) => index + 1);
         setRoundAttempts(0);
         setSelectedId(undefined);
+        setFeedback('Look at the picture. Pick the word.');
       }
       setLocked(false);
     }, 650);

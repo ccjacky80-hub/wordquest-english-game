@@ -9,6 +9,7 @@ import { createGameAttempt } from '@/games/game-attempt';
 import { getDailySessionId } from '@/content/progress-scheduler';
 import type { GameAttempt } from '@/domain/learning/types';
 import type { BossStep } from '@/content/boss-mission';
+import { getAttemptProtectionState, outcomeAfterProtectedCorrect, shouldEnterSoftRetest } from '@/domain/learning/attempt-protection';
 
 interface BossMissionGameProps { steps: BossStep[]; dayIndex: number; }
 
@@ -41,18 +42,32 @@ export function BossMissionGame({ steps, dayIndex }: BossMissionGameProps) {
   const sensors = useSensors(useSensor(MouseSensor, { activationConstraint: { distance: 4 } }), useSensor(TouchSensor, { activationConstraint: { delay: 120, tolerance: 5 } }));
   const sessionId = getDailySessionId(dayIndex, 'boss-mission');
   const step = steps[stepIndex];
+  const failedAttempts = attempts.filter((attempt) => attempt.wordId === step.source.id && attempt.outcome === 'wrong').length;
+  const protection = getAttemptProtectionState(failedAttempts);
 
   const resolveStep = (targetId: string) => {
     if (handledRef.current || locked || complete) return;
     handledRef.current = true;
     const expected = step.targetWordId ?? step.targetLabel;
     const correct = targetId === expected;
-    const attempt = createGameAttempt({ id: `boss-${step.id}-${Date.now()}`, sessionId, gameType: 'mini-story', wordId: step.source.id, relatedWordIds: step.source.relatedWordIds, promptType: step.kind === 'find' ? 'image-to-word' : 'instruction-action', outcome: correct ? 'independentCorrect' : 'wrong', attemptIndex: 1, hintsUsed: 0, audioReplayCount: 0, selectedAnswerId: targetId, occurredAt: new Date().toISOString(), contentVersion: step.source.contentVersion });
+    const attempt = createGameAttempt({ id: `boss-${step.id}-${Date.now()}`, sessionId, gameType: 'mini-story', wordId: step.source.id, relatedWordIds: step.source.relatedWordIds, promptType: step.kind === 'find' ? 'image-to-word' : 'instruction-action', outcome: correct ? failedAttempts > 0 ? outcomeAfterProtectedCorrect(failedAttempts) : 'independentCorrect' : failedAttempts + 1 >= 3 ? 'revealed' : 'wrong', attemptIndex: failedAttempts + 1, hintsUsed: protection.stage === 'hint' || protection.answerRevealed ? 1 : 0, audioReplayCount: 0, selectedAnswerId: targetId, occurredAt: new Date().toISOString(), contentVersion: step.source.contentVersion });
     setAttempts((current) => [...current, attempt]);
     void repository.recordAttempt(attempt);
     if (!correct) {
-      setFeedback('Nice try. Listen to the story and try again.');
-      window.setTimeout(() => { setLocked(false); handledRef.current = false; }, 500);
+      const nextProtection = getAttemptProtectionState(failedAttempts + 1);
+      setFeedback(shouldEnterSoftRetest(failedAttempts + 1)
+        ? 'We will revisit this story step in a few minutes.'
+        : nextProtection.stage === 'revealed'
+          ? `Here is the answer: ${step.targetLabel}. We will revisit it soon.`
+          : nextProtection.stage === 'hint' ? 'A small clue: listen to the story again.' : 'Nice try. Listen to the story and try again.');
+      window.setTimeout(() => {
+        if (shouldEnterSoftRetest(failedAttempts + 1)) {
+          if (stepIndex + 1 >= steps.length) setComplete(true);
+          else setStepIndex((index) => index + 1);
+        }
+        setLocked(false);
+        handledRef.current = false;
+      }, 500);
       return;
     }
     setLocked(true);

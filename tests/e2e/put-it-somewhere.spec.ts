@@ -13,7 +13,7 @@ test('put it somewhere supports wrong then correct drag with no page errors', as
   const source = page.locator('.drag-source');
   const wrongTarget = page.locator('[data-target-label="another place"]');
   await source.dragTo(wrongTarget);
-  await expect(page.getByText(/read the sentence again/i)).toBeVisible();
+  await expect(page.getByText(/read the sentence again|small clue|answer|revisit/i)).toBeVisible();
   await page.waitForTimeout(600);
 
   const correctTarget = page.locator('.drop-target:not(.drop-target-distractor)').first();

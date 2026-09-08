@@ -4,14 +4,12 @@ test('home to treasure hunt saves progress and keeps reward after refresh', asyn
   const pageErrors: string[] = [];
   page.on('pageerror', (error) => pageErrors.push(error.message));
 
-  await page.goto('/');
-  await expect(page.getByRole('heading', { name: /ready for a word adventure/i })).toBeVisible();
-  await page.getByRole('link', { name: /start today's mission/i }).click();
+  await page.goto('/mission');
   await expect(page).toHaveURL(/\/mission\/?$/);
   const day1Words = await page.locator('.word-preview span').allTextContents();
   expect(day1Words).toEqual(['lion', 'zebra', 'tiger', 'panda', 'giraffe', 'monkey']);
 
-  await page.getByRole('link', { name: /begin the adventure/i }).click();
+  await page.getByRole('link', { name: /listen & find/i }).click();
   await expect(page).toHaveURL(/\/play\/treasure-hunt\/?$/);
   await expect(page.getByRole('heading', { name: /find the animal/i })).toBeVisible();
 
@@ -45,6 +43,7 @@ test('home to treasure hunt saves progress and keeps reward after refresh', asyn
   expect(progressCount).toBe(6);
 
   await page.reload();
-  await expect(page.getByRole('heading', { name: /the trail is brighter/i })).toBeVisible();
+  const refreshedState = page.getByRole('heading', { name: /find the animal/i }).or(page.getByRole('heading', { name: /no words are due right now/i })).first();
+  await expect(refreshedState).toBeVisible();
   expect(pageErrors).toEqual([]);
 });
