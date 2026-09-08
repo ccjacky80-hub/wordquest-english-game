@@ -19,12 +19,14 @@ test('parent dashboard reports real local learning metrics after a game', async 
   await expect(gamePage.getByRole('heading', { name: /your word eyes are brighter/i })).toBeVisible();
   await gamePage.close();
 
-  const dashboardPage = await context.newPage();
+  const dashboardPage = page;
   dashboardPage.on('pageerror', (error) => pageErrors.push(error.message));
-  await dashboardPage.goto('/parent');
+  await dashboardPage.goto('/parent', { waitUntil: 'domcontentloaded', timeout: 15000 });
   await expect(dashboardPage.getByRole('heading', { name: /grown-up check/i })).toBeVisible();
   const holdButton = dashboardPage.getByRole('button', { name: /hold to continue/i });
-  await holdButton.hover();
+  const holdBox = await holdButton.boundingBox();
+  expect(holdBox).toBeTruthy();
+  await dashboardPage.mouse.move(holdBox!.x + holdBox!.width / 2, holdBox!.y + holdBox!.height / 2);
   await dashboardPage.mouse.down();
   await dashboardPage.waitForTimeout(2100);
   await dashboardPage.mouse.up();
