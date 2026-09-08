@@ -24,6 +24,8 @@ describe('mastery engine', () => {
     const next = applyAttemptToProgress(createEmptyWordProgress('C0001'), baseAttempt());
     expect(next.masteryLevel).toBe(1);
     expect(next.independentCorrectCount).toBe(1);
+    expect(next.currentReviewStage).toBe(0);
+    expect(next.nextReviewAt).toBe('2026-01-01T10:10:00.000Z');
   });
 
   it('records repeated wrong attempts without advancing mastery', () => {

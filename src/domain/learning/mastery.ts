@@ -1,4 +1,5 @@
 import { isIndependentCorrect, qualityForAttempt } from './quality';
+import { scheduleReview } from './scheduler';
 import type { GameAttempt, MasteryLevel, WordProgress } from './types';
 
 const MAX_MASTERY: MasteryLevel = 5;
@@ -64,6 +65,13 @@ export function applyAttemptToProgress(
     ? [...new Set([...progress.independentCorrectDates, dateKey(attempt.occurredAt)])]
     : progress.independentCorrectDates;
   const masteryLevel = canMaster(progress, attempt, nextLevel) ? MAX_MASTERY : nextLevel;
+  const review = scheduleReview({
+    wordId: attempt.wordId,
+    currentStage: progress.currentReviewStage,
+    quality,
+    now: attempt.occurredAt,
+    reason: progress.attemptCount === 0 ? 'new-word' : undefined,
+  });
 
   return {
     ...progress,
@@ -89,6 +97,8 @@ export function applyAttemptToProgress(
       independent && attempt.promptType === 'story-context' ? quality : 0,
     ),
     memoryStrength: Math.max(progress.memoryStrength, quality),
+    currentReviewStage: review.stage,
+    nextReviewAt: review.dueAt,
     version: progress.version + 1,
   };
 }
