@@ -54,6 +54,9 @@ export default function MissionPage() {
         <Link className="secondary-action wide-action" href="/play/put-it-somewhere">
           Put it somewhere
         </Link>
+        <Link className="secondary-action wide-action" href="/play/boss-mission">
+          Mini story boss
+        </Link>
       </div>
       <p className="mission-note">You can listen again or look again whenever you need.</p>
     </ChildPageFrame>
