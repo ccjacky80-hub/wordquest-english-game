@@ -4,6 +4,8 @@ out/
 coverage/
 playwright-report/
 parent-styles.tmp
+public/audio/
+public/images/
 test-results/
 .env*
 !.env.example
