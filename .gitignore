@@ -4,8 +4,6 @@ out/
 coverage/
 playwright-report/
 parent-styles.tmp
-public/audio/
-public/images/
 media-output/
 *.pdf
 test-results/
