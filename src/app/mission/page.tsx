@@ -9,16 +9,20 @@ export default function MissionPage() {
 
   return (
     <ChildPageFrame
-      eyebrow={`DAY ${currentDayIndex} / TODAY&apos;S MISSION`}
+      eyebrow={`DAY ${currentDayIndex} / TODAY'S MISSION`}
       title={courseCompleted ? 'Seven days complete!' : `Day ${currentDayIndex}: help the animals!`}
       description={isLoading
         ? 'Loading your adventure...'
         : courseCompleted
           ? 'You completed the full Animal Kingdom course. Keep your word trail bright with review.'
-          : `Today&apos;s path has ${mission.newWords.length} new words and ${mission.reviewWords.length} review words.`}
+          : `Today's activity path has ${mission.newWords.length} new words and ${mission.reviewWords.length} review words.`}
       backHref="/"
       backLabel="Home"
     >
+      <div className="mission-progress-note" role="status">
+        <strong>Today's path: 1 of 5 activities</strong>
+        <span>Complete any activity to move to the next course day. The five activities are different ways to practise today's words.</span>
+      </div>
       <div className="mission-overview">
         <div className="mission-stat">
           <span className="stat-number">{mission.newWords.length}</span>
@@ -33,7 +37,7 @@ export default function MissionPage() {
           <span>world reward</span>
         </div>
       </div>
-      <div className="word-preview-grid" aria-label="Today&apos;s new words">
+      <div className="word-preview-grid" aria-label="Today's new words">
         {mission.newWords.map((entry) => (
           <div className="word-preview" key={entry.id}>
             <img src={entry.imagePath} alt={entry.word} width={96} height={96} />

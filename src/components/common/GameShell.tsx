@@ -15,6 +15,7 @@ interface GameShellProps {
   children: ReactNode;
   sessionId: string;
   gameType: string;
+  activityIndex: number;
 }
 
 export function GameShell({
@@ -27,6 +28,7 @@ export function GameShell({
   children,
   sessionId,
   gameType,
+  activityIndex,
 }: GameShellProps) {
   const progress = Math.round((currentStep / totalSteps) * 100);
   const repository = useMemo(() => createProgressRepository(), []);
@@ -58,6 +60,7 @@ export function GameShell({
         </button>
         <div className="game-progress-wrap">
           <p id="game-title" className="game-title">{title}</p>
+          <p className="game-activity-progress">Activity {activityIndex} of 5 for today</p>
           <div className="game-progress-track" aria-label={`${currentStep} of ${totalSteps} complete`}>
             <div className="game-progress-fill" style={{ width: `${progress}%` }} />
           </div>

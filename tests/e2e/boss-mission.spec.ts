@@ -44,5 +44,6 @@ test('boss mission unlocks from learned words and completes three story steps', 
 
   await page.locator('.drag-source').dragTo(page.locator('.drop-target'));
   await expect(page.getByRole('heading', { name: /animal kingdom story shines/i })).toBeVisible();
+  await expect(page.getByText(/attempts sent through the Learning Engine/i)).toBeVisible();
   expect(pageErrors).toEqual([]);
 });

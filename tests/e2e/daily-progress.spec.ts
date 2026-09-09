@@ -25,7 +25,8 @@ test('completing Day1 advances Mission Intro to Day2 after re-entry', async ({ p
   await page.close();
   await missionPage.goto('/mission');
   await expect(missionPage.getByRole('heading', { name: /day 2/i })).toBeVisible();
-  await expect(missionPage.getByText(/5 new words and 0 review words/i)).toBeVisible();
+  await expect(missionPage.getByText(/Today's activity path has 5 new words and 0 review words/i)).toBeVisible();
+  await expect(missionPage.getByRole('status')).toContainText(/Today's path: 1 of 5 activities/i);
   await expect(missionPage.locator('.word-preview')).toHaveCount(5);
   await missionPage.close();
 });

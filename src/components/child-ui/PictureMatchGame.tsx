@@ -165,6 +165,7 @@ export function PictureMatchGame({ words, dayIndex, optionCount = 4 }: PictureMa
       onExit={() => { window.location.href = '/mission'; }}
       sessionId={sessionId}
       gameType="picture-match"
+      activityIndex={2}
     >
       <div className="picture-match-prompt">
         <p className="game-eyebrow">LOOK &amp; MATCH</p>

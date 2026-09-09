@@ -32,6 +32,7 @@ function Target({ step, onPointerUp }: { step: BossStep; onPointerUp: () => void
 export function BossMissionGame({ steps, dayIndex }: BossMissionGameProps) {
   const [stepIndex, setStepIndex] = useState(0);
   const [attempts, setAttempts] = useState<GameAttempt[]>([]);
+  const [savedAttemptCount, setSavedAttemptCount] = useState(0);
   const [feedback, setFeedback] = useState('A story adventure is waiting.');
   const [complete, setComplete] = useState(false);
   const [locked, setLocked] = useState(false);
@@ -52,7 +53,7 @@ export function BossMissionGame({ steps, dayIndex }: BossMissionGameProps) {
     const correct = targetId === expected;
     const attempt = createGameAttempt({ id: `boss-${step.id}-${Date.now()}`, sessionId, gameType: 'mini-story', wordId: step.source.id, relatedWordIds: step.source.relatedWordIds, promptType: step.kind === 'find' ? 'image-to-word' : 'instruction-action', outcome: correct ? failedAttempts > 0 ? outcomeAfterProtectedCorrect(failedAttempts) : 'independentCorrect' : failedAttempts + 1 >= 3 ? 'revealed' : 'wrong', attemptIndex: failedAttempts + 1, hintsUsed: protection.stage === 'hint' || protection.answerRevealed ? 1 : 0, audioReplayCount: 0, selectedAnswerId: targetId, occurredAt: new Date().toISOString(), contentVersion: step.source.contentVersion });
     setAttempts((current) => [...current, attempt]);
-    void repository.recordAttempt(attempt);
+    void repository.recordAttempt(attempt).then(() => setSavedAttemptCount((count) => count + 1));
     if (!correct) {
       const nextProtection = getAttemptProtectionState(failedAttempts + 1);
       setFeedback(shouldEnterSoftRetest(failedAttempts + 1)
@@ -76,10 +77,10 @@ export function BossMissionGame({ steps, dayIndex }: BossMissionGameProps) {
   };
 
   const onDragEnd = ({ over }: DragEndEvent) => { if (over) resolveStep(String(over.id)); activeRef.current = null; setActiveId(null); };
-  if (complete) return <section className="reward-card" aria-labelledby="boss-reward-title"><p className="eyebrow">BOSS MISSION COMPLETE / 故事关卡完成</p><div className="reward-star" aria-hidden="true">✦</div><h1 id="boss-reward-title">The Animal Kingdom story shines!</h1><p>You connected {steps.length} words in one story. Your progress is saved.</p><div className="home-actions reward-actions"><Link className="primary-action" href="/map">See the map</Link><Link className="secondary-action" href="/">Back home</Link></div></section>;
+  if (complete) return <section className="reward-card" aria-labelledby="boss-reward-title"><p className="eyebrow">BOSS MISSION COMPLETE / 故事关卡完成</p><div className="reward-star" aria-hidden="true">✦</div><h1 id="boss-reward-title">The Animal Kingdom story shines!</h1><p>You connected {steps.length} words in one story. Your progress is saved on this device.</p><p className="reward-detail">{savedAttemptCount} attempts sent through the Learning Engine.</p><div className="home-actions reward-actions"><Link className="primary-action" href="/map">See the map</Link><Link className="secondary-action" href="/">Back home</Link></div></section>;
 
   return <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={({ active }) => { activeRef.current = String(active.id); setActiveId(String(active.id)); }} onDragCancel={() => { activeRef.current = null; setActiveId(null); handledRef.current = false; }} onDragEnd={onDragEnd}>
-    <GameShell currentStep={stepIndex} totalSteps={steps.length} title="Boss Mission" attempts={attempts} isComplete={complete} onExit={() => { window.location.href = '/mission'; }} sessionId={sessionId} gameType="mini-story">
+    <GameShell currentStep={stepIndex} totalSteps={steps.length} title="Boss Mission" attempts={attempts} isComplete={complete} onExit={() => { window.location.href = '/mission'; }} sessionId={sessionId} gameType="mini-story" activityIndex={5}>
       <div className="drag-instruction" data-boss-step={step.id}><p className="game-eyebrow">MINI STORY · STEP {stepIndex + 1}</p><h1>{step.instruction}</h1><p className="feedback-text" aria-live="polite">{feedback}</p></div>
       <div className="drag-board"><Source step={step} onClick={step.kind === 'find' ? () => resolveStep(step.source.id) : undefined} /><Target step={step} onPointerUp={() => { if (activeRef.current) resolveStep(step.targetWordId ?? step.targetLabel); }} /></div>
     </GameShell>

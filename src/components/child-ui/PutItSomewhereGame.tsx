@@ -177,6 +177,7 @@ export function PutItSomewhereGame({ missions, dayIndex }: PutItSomewhereGamePro
         onExit={() => { window.location.href = '/mission'; }}
         sessionId={sessionId}
         gameType="put-it-somewhere"
+        activityIndex={4}
       >
         <div className="drag-instruction" data-mission-kind={mission.kind}>
           <p className="game-eyebrow">LISTEN &amp; MOVE</p>

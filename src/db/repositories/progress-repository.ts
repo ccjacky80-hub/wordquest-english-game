@@ -61,7 +61,7 @@ export function createProgressRepository(db: WordQuestDB = wordQuestDb): Progres
       });
     },
     async recordAttempt(attempt: GameAttempt): Promise<WordProgress> {
-      return db.transaction('rw', [db.wordProgress, db.attempts, db.reviewQueue, db.localEvents], async () => {
+      return db.transaction('rw', [db.wordProgress, db.attempts, db.reviewQueue, db.confusionPairs, db.localEvents], async () => {
         const current = (await db.wordProgress.get(attempt.wordId)) ?? createEmptyWordProgress(attempt.wordId);
         const updated = applyAttemptToProgress(current, attempt);
         await db.attempts.put(attempt);

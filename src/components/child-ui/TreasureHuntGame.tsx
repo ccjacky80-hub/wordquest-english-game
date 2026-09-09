@@ -160,6 +160,7 @@ export function TreasureHuntGame({ words, dayIndex }: TreasureHuntGameProps) {
       onExit={() => { window.location.href = '/mission'; }}
       sessionId={sessionId}
       gameType="treasure-hunt"
+      activityIndex={1}
     >
       <div className="treasure-prompt" data-target-word-id={round.target.id}>
         <p className="game-eyebrow">LISTEN &amp; FIND</p>
