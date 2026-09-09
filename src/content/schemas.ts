@@ -21,6 +21,8 @@ export const vocabularyEntrySchema = z.object({
   difficulty: z.number().int().min(1).max(5),
   imageability: z.number().int().min(1).max(5),
   actionability: z.enum(["Low", "Medium", "High"]),
+  imagePath: z.string().startsWith("/images/").optional(),
+  audioPath: z.string().startsWith("/audio/").optional(),
   source: z.array(sourceReferenceSchema).min(1),
   relatedWordIds: z.array(z.string().regex(/^C\d{4}$/)),
   contrastWordIds: z.array(z.string().regex(/^C\d{4}$/)),

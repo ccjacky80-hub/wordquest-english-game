@@ -1,0 +1,302 @@
+[
+  {
+    "wordId": "C0430",
+    "word": "lion",
+    "mvpRank": 1,
+    "difficulty": 1,
+    "imageability": 5,
+    "actionability": "Medium",
+    "prompt": "Create a vocabulary card illustration for the English word 'lion': a friendly golden lion with a rounded mane and clear paws. Use a pale cream or mist background, one soft grounding shape, and a centered subject with roughly 15–20% clear space around it. Keep the shapes especially simple for a first-learning card. flat vector illustration, clean bold rounded outlines, simple geometric shapes, bright but limited color palette, centered composition with generous negative space, child-friendly educational app art, consistent character proportions, no photorealistic shading, no gradients, no text, no watermark.",
+    "suggestedFilename": "C0430.webp"
+  },
+  {
+    "wordId": "C0431",
+    "word": "zebra",
+    "mvpRank": 2,
+    "difficulty": 1,
+    "imageability": 5,
+    "actionability": "Medium",
+    "prompt": "Create a vocabulary card illustration for the English word 'zebra': a friendly zebra with bold simplified black-and-cream stripes. Use a pale cream or mist background, one soft grounding shape, and a centered subject with roughly 15–20% clear space around it. Keep the shapes especially simple for a first-learning card. flat vector illustration, clean bold rounded outlines, simple geometric shapes, bright but limited color palette, centered composition with generous negative space, child-friendly educational app art, consistent character proportions, no photorealistic shading, no gradients, no text, no watermark.",
+    "suggestedFilename": "C0431.webp"
+  },
+  {
+    "wordId": "C0432",
+    "word": "tiger",
+    "mvpRank": 3,
+    "difficulty": 1,
+    "imageability": 5,
+    "actionability": "Medium",
+    "prompt": "Create a vocabulary card illustration for the English word 'tiger': a friendly orange tiger with simple dark stripes. Use a pale cream or mist background, one soft grounding shape, and a centered subject with roughly 15–20% clear space around it. Keep the shapes especially simple for a first-learning card. flat vector illustration, clean bold rounded outlines, simple geometric shapes, bright but limited color palette, centered composition with generous negative space, child-friendly educational app art, consistent character proportions, no photorealistic shading, no gradients, no text, no watermark.",
+    "suggestedFilename": "C0432.webp"
+  },
+  {
+    "wordId": "C0402",
+    "word": "panda",
+    "mvpRank": 4,
+    "difficulty": 1,
+    "imageability": 5,
+    "actionability": "Medium",
+    "prompt": "Create a vocabulary card illustration for the English word 'panda': a friendly black-and-white panda sitting upright. Use a pale cream or mist background, one soft grounding shape, and a centered subject with roughly 15–20% clear space around it. Keep the shapes especially simple for a first-learning card. flat vector illustration, clean bold rounded outlines, simple geometric shapes, bright but limited color palette, centered composition with generous negative space, child-friendly educational app art, consistent character proportions, no photorealistic shading, no gradients, no text, no watermark.",
+    "suggestedFilename": "C0402.webp"
+  },
+  {
+    "wordId": "C0433",
+    "word": "giraffe",
+    "mvpRank": 5,
+    "difficulty": 1,
+    "imageability": 5,
+    "actionability": "Medium",
+    "prompt": "Create a vocabulary card illustration for the English word 'giraffe': a friendly giraffe with a long neck and simple brown patches. Use a pale cream or mist background, one soft grounding shape, and a centered subject with roughly 15–20% clear space around it. Keep the shapes especially simple for a first-learning card. flat vector illustration, clean bold rounded outlines, simple geometric shapes, bright but limited color palette, centered composition with generous negative space, child-friendly educational app art, consistent character proportions, no photorealistic shading, no gradients, no text, no watermark.",
+    "suggestedFilename": "C0433.webp"
+  },
+  {
+    "wordId": "C0434",
+    "word": "monkey",
+    "mvpRank": 6,
+    "difficulty": 1,
+    "imageability": 5,
+    "actionability": "Medium",
+    "prompt": "Create a vocabulary card illustration for the English word 'monkey': a friendly brown monkey with a curled tail. Use a pale cream or mist background, one soft grounding shape, and a centered subject with roughly 15–20% clear space around it. Keep the shapes especially simple for a first-learning card. flat vector illustration, clean bold rounded outlines, simple geometric shapes, bright but limited color palette, centered composition with generous negative space, child-friendly educational app art, consistent character proportions, no photorealistic shading, no gradients, no text, no watermark.",
+    "suggestedFilename": "C0434.webp"
+  },
+  {
+    "wordId": "C0435",
+    "word": "fox",
+    "mvpRank": 7,
+    "difficulty": 1,
+    "imageability": 5,
+    "actionability": "Medium",
+    "prompt": "Create a vocabulary card illustration for the English word 'fox': a friendly orange fox with a white muzzle and large tail. Use a pale cream or mist background, one soft grounding shape, and a centered subject with roughly 15–20% clear space around it. Keep the shapes especially simple for a first-learning card. flat vector illustration, clean bold rounded outlines, simple geometric shapes, bright but limited color palette, centered composition with generous negative space, child-friendly educational app art, consistent character proportions, no photorealistic shading, no gradients, no text, no watermark.",
+    "suggestedFilename": "C0435.webp"
+  },
+  {
+    "wordId": "C0436",
+    "word": "goat",
+    "mvpRank": 8,
+    "difficulty": 1,
+    "imageability": 5,
+    "actionability": "Medium",
+    "prompt": "Create a vocabulary card illustration for the English word 'goat': a friendly cream goat with small curved horns. Use a pale cream or mist background, one soft grounding shape, and a centered subject with roughly 15–20% clear space around it. Keep the shapes especially simple for a first-learning card. flat vector illustration, clean bold rounded outlines, simple geometric shapes, bright but limited color palette, centered composition with generous negative space, child-friendly educational app art, consistent character proportions, no photorealistic shading, no gradients, no text, no watermark.",
+    "suggestedFilename": "C0436.webp"
+  },
+  {
+    "wordId": "C0437",
+    "word": "bear",
+    "mvpRank": 9,
+    "difficulty": 1,
+    "imageability": 5,
+    "actionability": "Medium",
+    "prompt": "Create a vocabulary card illustration for the English word 'bear': a friendly brown bear standing with visible paws. Use a pale cream or mist background, one soft grounding shape, and a centered subject with roughly 15–20% clear space around it. Keep the shapes especially simple for a first-learning card. flat vector illustration, clean bold rounded outlines, simple geometric shapes, bright but limited color palette, centered composition with generous negative space, child-friendly educational app art, consistent character proportions, no photorealistic shading, no gradients, no text, no watermark.",
+    "suggestedFilename": "C0437.webp"
+  },
+  {
+    "wordId": "C0438",
+    "word": "snake",
+    "mvpRank": 10,
+    "difficulty": 1,
+    "imageability": 5,
+    "actionability": "Medium",
+    "prompt": "Create a vocabulary card illustration for the English word 'snake': a friendly green snake in a gentle S-shaped coil. Use a pale cream or mist background, one soft grounding shape, and a centered subject with roughly 15–20% clear space around it. Keep the shapes especially simple for a first-learning card. flat vector illustration, clean bold rounded outlines, simple geometric shapes, bright but limited color palette, centered composition with generous negative space, child-friendly educational app art, consistent character proportions, no photorealistic shading, no gradients, no text, no watermark.",
+    "suggestedFilename": "C0438.webp"
+  },
+  {
+    "wordId": "C0439",
+    "word": "hippo",
+    "mvpRank": 11,
+    "difficulty": 1,
+    "imageability": 5,
+    "actionability": "Medium",
+    "prompt": "Create a vocabulary card illustration for the English word 'hippo': a friendly purple-gray hippo with a rounded body. Use a pale cream or mist background, one soft grounding shape, and a centered subject with roughly 15–20% clear space around it. Keep the shapes especially simple for a first-learning card. flat vector illustration, clean bold rounded outlines, simple geometric shapes, bright but limited color palette, centered composition with generous negative space, child-friendly educational app art, consistent character proportions, no photorealistic shading, no gradients, no text, no watermark.",
+    "suggestedFilename": "C0439.webp"
+  },
+  {
+    "wordId": "C0440",
+    "word": "elephant",
+    "mvpRank": 12,
+    "difficulty": 1,
+    "imageability": 5,
+    "actionability": "Medium",
+    "prompt": "Create a vocabulary card illustration for the English word 'elephant': a friendly gray elephant with a short raised trunk. Use a pale cream or mist background, one soft grounding shape, and a centered subject with roughly 15–20% clear space around it. Keep the shapes especially simple for a first-learning card. flat vector illustration, clean bold rounded outlines, simple geometric shapes, bright but limited color palette, centered composition with generous negative space, child-friendly educational app art, consistent character proportions, no photorealistic shading, no gradients, no text, no watermark.",
+    "suggestedFilename": "C0440.webp"
+  },
+  {
+    "wordId": "C0441",
+    "word": "rabbit",
+    "mvpRank": 13,
+    "difficulty": 1,
+    "imageability": 5,
+    "actionability": "Medium",
+    "prompt": "Create a vocabulary card illustration for the English word 'rabbit': a friendly white rabbit with long ears. Use a pale cream or mist background, one soft grounding shape, and a centered subject with roughly 15–20% clear space around it. Keep the shapes especially simple for a first-learning card. flat vector illustration, clean bold rounded outlines, simple geometric shapes, bright but limited color palette, centered composition with generous negative space, child-friendly educational app art, consistent character proportions, no photorealistic shading, no gradients, no text, no watermark.",
+    "suggestedFilename": "C0441.webp"
+  },
+  {
+    "wordId": "C0442",
+    "word": "bee",
+    "mvpRank": 14,
+    "difficulty": 1,
+    "imageability": 5,
+    "actionability": "Medium",
+    "prompt": "Create a vocabulary card illustration for the English word 'bee': a friendly yellow-and-black bee with two simple wings. Use a pale cream or mist background, one soft grounding shape, and a centered subject with roughly 15–20% clear space around it. Keep the shapes especially simple for a first-learning card. flat vector illustration, clean bold rounded outlines, simple geometric shapes, bright but limited color palette, centered composition with generous negative space, child-friendly educational app art, consistent character proportions, no photorealistic shading, no gradients, no text, no watermark.",
+    "suggestedFilename": "C0442.webp"
+  },
+  {
+    "wordId": "C0403",
+    "word": "turtle",
+    "mvpRank": 15,
+    "difficulty": 1,
+    "imageability": 5,
+    "actionability": "Medium",
+    "prompt": "Create a vocabulary card illustration for the English word 'turtle': a friendly green turtle with a patterned shell. Use a pale cream or mist background, one soft grounding shape, and a centered subject with roughly 15–20% clear space around it. Keep the shapes especially simple for a first-learning card. flat vector illustration, clean bold rounded outlines, simple geometric shapes, bright but limited color palette, centered composition with generous negative space, child-friendly educational app art, consistent character proportions, no photorealistic shading, no gradients, no text, no watermark.",
+    "suggestedFilename": "C0403.webp"
+  },
+  {
+    "wordId": "C0399",
+    "word": "frog",
+    "mvpRank": 16,
+    "difficulty": 1,
+    "imageability": 5,
+    "actionability": "Medium",
+    "prompt": "Create a vocabulary card illustration for the English word 'frog': a friendly green frog in a small crouched pose. Use a pale cream or mist background, one soft grounding shape, and a centered subject with roughly 15–20% clear space around it. Keep the shapes especially simple for a first-learning card. flat vector illustration, clean bold rounded outlines, simple geometric shapes, bright but limited color palette, centered composition with generous negative space, child-friendly educational app art, consistent character proportions, no photorealistic shading, no gradients, no text, no watermark.",
+    "suggestedFilename": "C0399.webp"
+  },
+  {
+    "wordId": "C0398",
+    "word": "bird",
+    "mvpRank": 17,
+    "difficulty": 1,
+    "imageability": 5,
+    "actionability": "Medium",
+    "prompt": "Create a vocabulary card illustration for the English word 'bird': a friendly small blue bird perched with a clear beak. Use a pale cream or mist background, one soft grounding shape, and a centered subject with roughly 15–20% clear space around it. Keep the shapes especially simple for a first-learning card. flat vector illustration, clean bold rounded outlines, simple geometric shapes, bright but limited color palette, centered composition with generous negative space, child-friendly educational app art, consistent character proportions, no photorealistic shading, no gradients, no text, no watermark.",
+    "suggestedFilename": "C0398.webp"
+  },
+  {
+    "wordId": "C0443",
+    "word": "ant",
+    "mvpRank": 18,
+    "difficulty": 1,
+    "imageability": 5,
+    "actionability": "Medium",
+    "prompt": "Create a vocabulary card illustration for the English word 'ant': a friendly tiny red ant shown large enough to recognize. Use a pale cream or mist background, one soft grounding shape, and a centered subject with roughly 15–20% clear space around it. Keep the shapes especially simple for a first-learning card. flat vector illustration, clean bold rounded outlines, simple geometric shapes, bright but limited color palette, centered composition with generous negative space, child-friendly educational app art, consistent character proportions, no photorealistic shading, no gradients, no text, no watermark.",
+    "suggestedFilename": "C0443.webp"
+  },
+  {
+    "wordId": "C0024",
+    "word": "eagle",
+    "mvpRank": 19,
+    "difficulty": 1,
+    "imageability": 5,
+    "actionability": "Medium",
+    "prompt": "Create a vocabulary card illustration for the English word 'eagle': a friendly brown-and-white eagle with broad wings. Use a pale cream or mist background, one soft grounding shape, and a centered subject with roughly 15–20% clear space around it. Keep the shapes especially simple for a first-learning card. flat vector illustration, clean bold rounded outlines, simple geometric shapes, bright but limited color palette, centered composition with generous negative space, child-friendly educational app art, consistent character proportions, no photorealistic shading, no gradients, no text, no watermark.",
+    "suggestedFilename": "C0024.webp"
+  },
+  {
+    "wordId": "C0026",
+    "word": "rhino",
+    "mvpRank": 20,
+    "difficulty": 2,
+    "imageability": 5,
+    "actionability": "Medium",
+    "prompt": "Create a vocabulary card illustration for the English word 'rhino': a friendly gray rhinoceros with one clear horn. Use a pale cream or mist background, one soft grounding shape, and a centered subject with roughly 15–20% clear space around it. Keep the shapes especially simple for a first-learning card. flat vector illustration, clean bold rounded outlines, simple geometric shapes, bright but limited color palette, centered composition with generous negative space, child-friendly educational app art, consistent character proportions, no photorealistic shading, no gradients, no text, no watermark.",
+    "suggestedFilename": "C0026.webp"
+  },
+  {
+    "wordId": "C0027",
+    "word": "deer",
+    "mvpRank": 21,
+    "difficulty": 1,
+    "imageability": 5,
+    "actionability": "Medium",
+    "prompt": "Create a vocabulary card illustration for the English word 'deer': a friendly light-brown deer with small antlers. Use a pale cream or mist background, one soft grounding shape, and a centered subject with roughly 15–20% clear space around it. Keep the shapes especially simple for a first-learning card. flat vector illustration, clean bold rounded outlines, simple geometric shapes, bright but limited color palette, centered composition with generous negative space, child-friendly educational app art, consistent character proportions, no photorealistic shading, no gradients, no text, no watermark.",
+    "suggestedFilename": "C0027.webp"
+  },
+  {
+    "wordId": "C0028",
+    "word": "feather",
+    "mvpRank": 22,
+    "difficulty": 2,
+    "imageability": 5,
+    "actionability": "Medium",
+    "prompt": "Create a vocabulary card illustration for the English word 'feather': one large soft blue feather floating upright. Use a pale cream or mist background, one soft grounding shape, and a centered subject with roughly 15–20% clear space around it. Keep the shapes especially simple for a first-learning card. flat vector illustration, clean bold rounded outlines, simple geometric shapes, bright but limited color palette, centered composition with generous negative space, child-friendly educational app art, consistent character proportions, no photorealistic shading, no gradients, no text, no watermark.",
+    "suggestedFilename": "C0028.webp"
+  },
+  {
+    "wordId": "C0029",
+    "word": "wing",
+    "mvpRank": 23,
+    "difficulty": 1,
+    "imageability": 5,
+    "actionability": "Medium",
+    "prompt": "Create a vocabulary card illustration for the English word 'wing': one clearly readable blue bird wing shown in side view. Use a pale cream or mist background, one soft grounding shape, and a centered subject with roughly 15–20% clear space around it. Keep the shapes especially simple for a first-learning card. flat vector illustration, clean bold rounded outlines, simple geometric shapes, bright but limited color palette, centered composition with generous negative space, child-friendly educational app art, consistent character proportions, no photorealistic shading, no gradients, no text, no watermark.",
+    "suggestedFilename": "C0029.webp"
+  },
+  {
+    "wordId": "C0030",
+    "word": "claw",
+    "mvpRank": 24,
+    "difficulty": 2,
+    "imageability": 5,
+    "actionability": "Medium",
+    "prompt": "Create a vocabulary card illustration for the English word 'claw': one simplified curved animal claw shown clearly against a cream card. Use a pale cream or mist background, one soft grounding shape, and a centered subject with roughly 15–20% clear space around it. Keep the shapes especially simple for a first-learning card. flat vector illustration, clean bold rounded outlines, simple geometric shapes, bright but limited color palette, centered composition with generous negative space, child-friendly educational app art, consistent character proportions, no photorealistic shading, no gradients, no text, no watermark.",
+    "suggestedFilename": "C0030.webp"
+  },
+  {
+    "wordId": "C0031",
+    "word": "horn",
+    "mvpRank": 25,
+    "difficulty": 2,
+    "imageability": 5,
+    "actionability": "Medium",
+    "prompt": "Create a vocabulary card illustration for the English word 'horn': one smooth gray animal horn shown clearly in three-quarter view. Use a pale cream or mist background, one soft grounding shape, and a centered subject with roughly 15–20% clear space around it. Keep the shapes especially simple for a first-learning card. flat vector illustration, clean bold rounded outlines, simple geometric shapes, bright but limited color palette, centered composition with generous negative space, child-friendly educational app art, consistent character proportions, no photorealistic shading, no gradients, no text, no watermark.",
+    "suggestedFilename": "C0031.webp"
+  },
+  {
+    "wordId": "C0098",
+    "word": "tail",
+    "mvpRank": 26,
+    "difficulty": 1,
+    "imageability": 5,
+    "actionability": "Medium",
+    "prompt": "Create a vocabulary card illustration for the English word 'tail': a friendly animal tail with a clear curved silhouette, attached to a small partial animal body. Use a pale cream or mist background, one soft grounding shape, and a centered subject with roughly 15–20% clear space around it. Keep the shapes especially simple for a first-learning card. flat vector illustration, clean bold rounded outlines, simple geometric shapes, bright but limited color palette, centered composition with generous negative space, child-friendly educational app art, consistent character proportions, no photorealistic shading, no gradients, no text, no watermark.",
+    "suggestedFilename": "C0098.webp"
+  },
+  {
+    "wordId": "C0103",
+    "word": "fur",
+    "mvpRank": 27,
+    "difficulty": 1,
+    "imageability": 5,
+    "actionability": "Medium",
+    "prompt": "Create a vocabulary card illustration for the English word 'fur': a friendly brown animal with one clearly visible soft fur patch. Use a pale cream or mist background, one soft grounding shape, and a centered subject with roughly 15–20% clear space around it. Keep the shapes especially simple for a first-learning card. flat vector illustration, clean bold rounded outlines, simple geometric shapes, bright but limited color palette, centered composition with generous negative space, child-friendly educational app art, consistent character proportions, no photorealistic shading, no gradients, no text, no watermark.",
+    "suggestedFilename": "C0103.webp"
+  },
+  {
+    "wordId": "C0097",
+    "word": "paw",
+    "mvpRank": 28,
+    "difficulty": 1,
+    "imageability": 5,
+    "actionability": "Medium",
+    "prompt": "Create a vocabulary card illustration for the English word 'paw': one friendly rounded animal paw with four simple toes. Use a pale cream or mist background, one soft grounding shape, and a centered subject with roughly 15–20% clear space around it. Keep the shapes especially simple for a first-learning card. flat vector illustration, clean bold rounded outlines, simple geometric shapes, bright but limited color palette, centered composition with generous negative space, child-friendly educational app art, consistent character proportions, no photorealistic shading, no gradients, no text, no watermark.",
+    "suggestedFilename": "C0097.webp"
+  },
+  {
+    "wordId": "C0101",
+    "word": "fly",
+    "mvpRank": 29,
+    "difficulty": 1,
+    "imageability": 4,
+    "actionability": "High",
+    "prompt": "Create a vocabulary card illustration for the English word 'fly': a friendly small bird flying upward through a pale blue sky. Use a pale cream or mist background, one soft grounding shape, and a centered subject with roughly 15–20% clear space around it. The pose should communicate the action immediately. Keep the shapes especially simple for a first-learning card. flat vector illustration, clean bold rounded outlines, simple geometric shapes, bright but limited color palette, centered composition with generous negative space, child-friendly educational app art, consistent character proportions, no photorealistic shading, no gradients, no text, no watermark.",
+    "suggestedFilename": "C0101.webp"
+  },
+  {
+    "wordId": "C0016",
+    "word": "swim",
+    "mvpRank": 30,
+    "difficulty": 1,
+    "imageability": 4,
+    "actionability": "High",
+    "prompt": "Create a vocabulary card illustration for the English word 'swim': a friendly green turtle swimming through simple blue water waves. Use a pale cream or mist background, one soft grounding shape, and a centered subject with roughly 15–20% clear space around it. The pose should communicate the action immediately. Keep the shapes especially simple for a first-learning card. flat vector illustration, clean bold rounded outlines, simple geometric shapes, bright but limited color palette, centered composition with generous negative space, child-friendly educational app art, consistent character proportions, no photorealistic shading, no gradients, no text, no watermark.",
+    "suggestedFilename": "C0016.webp"
+  }
+]

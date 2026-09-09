@@ -598,7 +598,9 @@
         "enabled": true,
         "rank": 30
       },
-      "contentVersion": 1
+      "contentVersion": 1,
+      "imagePath": "/images/C0016.webp",
+      "audioPath": "/audio/C0016.mp3"
     },
     {
       "id": "C0017",
@@ -887,7 +889,9 @@
         "enabled": true,
         "rank": 19
       },
-      "contentVersion": 1
+      "contentVersion": 1,
+      "imagePath": "/images/C0024.webp",
+      "audioPath": "/audio/C0024.mp3"
     },
     {
       "id": "C0025",
@@ -963,7 +967,9 @@
         "enabled": true,
         "rank": 20
       },
-      "contentVersion": 1
+      "contentVersion": 1,
+      "imagePath": "/images/C0026.webp",
+      "audioPath": "/audio/C0026.mp3"
     },
     {
       "id": "C0027",
@@ -997,7 +1003,9 @@
         "enabled": true,
         "rank": 21
       },
-      "contentVersion": 1
+      "contentVersion": 1,
+      "imagePath": "/images/C0027.webp",
+      "audioPath": "/audio/C0027.mp3"
     },
     {
       "id": "C0028",
@@ -1035,7 +1043,9 @@
         "enabled": true,
         "rank": 22
       },
-      "contentVersion": 1
+      "contentVersion": 1,
+      "imagePath": "/images/C0028.webp",
+      "audioPath": "/audio/C0028.mp3"
     },
     {
       "id": "C0029",
@@ -1082,7 +1092,9 @@
         "enabled": true,
         "rank": 23
       },
-      "contentVersion": 1
+      "contentVersion": 1,
+      "imagePath": "/images/C0029.webp",
+      "audioPath": "/audio/C0029.mp3"
     },
     {
       "id": "C0030",
@@ -1120,7 +1132,9 @@
         "enabled": true,
         "rank": 24
       },
-      "contentVersion": 1
+      "contentVersion": 1,
+      "imagePath": "/images/C0030.webp",
+      "audioPath": "/audio/C0030.mp3"
     },
     {
       "id": "C0031",
@@ -1158,7 +1172,9 @@
         "enabled": true,
         "rank": 25
       },
-      "contentVersion": 1
+      "contentVersion": 1,
+      "imagePath": "/images/C0031.webp",
+      "audioPath": "/audio/C0031.mp3"
     },
     {
       "id": "C0032",
@@ -3646,7 +3662,9 @@
         "enabled": true,
         "rank": 28
       },
-      "contentVersion": 1
+      "contentVersion": 1,
+      "imagePath": "/images/C0097.webp",
+      "audioPath": "/audio/C0097.mp3"
     },
     {
       "id": "C0098",
@@ -3691,7 +3709,9 @@
         "enabled": true,
         "rank": 26
       },
-      "contentVersion": 1
+      "contentVersion": 1,
+      "imagePath": "/images/C0098.webp",
+      "audioPath": "/audio/C0098.mp3"
     },
     {
       "id": "C0099",
@@ -3806,7 +3826,9 @@
         "enabled": true,
         "rank": 29
       },
-      "contentVersion": 1
+      "contentVersion": 1,
+      "imagePath": "/images/C0101.webp",
+      "audioPath": "/audio/C0101.mp3"
     },
     {
       "id": "C0102",
@@ -3879,7 +3901,9 @@
         "enabled": true,
         "rank": 27
       },
-      "contentVersion": 1
+      "contentVersion": 1,
+      "imagePath": "/images/C0103.webp",
+      "audioPath": "/audio/C0103.mp3"
     },
     {
       "id": "C0104",
@@ -14378,7 +14402,9 @@
         "enabled": true,
         "rank": 17
       },
-      "contentVersion": 1
+      "contentVersion": 1,
+      "imagePath": "/images/C0398.webp",
+      "audioPath": "/audio/C0398.mp3"
     },
     {
       "id": "C0399",
@@ -14423,7 +14449,9 @@
         "enabled": true,
         "rank": 16
       },
-      "contentVersion": 1
+      "contentVersion": 1,
+      "imagePath": "/images/C0399.webp",
+      "audioPath": "/audio/C0399.mp3"
     },
     {
       "id": "C0400",
@@ -14538,7 +14566,9 @@
         "enabled": true,
         "rank": 4
       },
-      "contentVersion": 1
+      "contentVersion": 1,
+      "imagePath": "/images/C0402.webp",
+      "audioPath": "/audio/C0402.mp3"
     },
     {
       "id": "C0403",
@@ -14583,7 +14613,9 @@
         "enabled": true,
         "rank": 15
       },
-      "contentVersion": 1
+      "contentVersion": 1,
+      "imagePath": "/images/C0403.webp",
+      "audioPath": "/audio/C0403.mp3"
     },
     {
       "id": "C0404",
@@ -15608,7 +15640,9 @@
         "enabled": true,
         "rank": 1
       },
-      "contentVersion": 1
+      "contentVersion": 1,
+      "imagePath": "/images/C0430.webp",
+      "audioPath": "/audio/C0430.mp3"
     },
     {
       "id": "C0431",
@@ -15644,7 +15678,9 @@
         "enabled": true,
         "rank": 2
       },
-      "contentVersion": 1
+      "contentVersion": 1,
+      "imagePath": "/images/C0431.webp",
+      "audioPath": "/audio/C0431.mp3"
     },
     {
       "id": "C0432",
@@ -15680,7 +15716,9 @@
         "enabled": true,
         "rank": 3
       },
-      "contentVersion": 1
+      "contentVersion": 1,
+      "imagePath": "/images/C0432.webp",
+      "audioPath": "/audio/C0432.mp3"
     },
     {
       "id": "C0433",
@@ -15716,7 +15754,9 @@
         "enabled": true,
         "rank": 5
       },
-      "contentVersion": 1
+      "contentVersion": 1,
+      "imagePath": "/images/C0433.webp",
+      "audioPath": "/audio/C0433.mp3"
     },
     {
       "id": "C0434",
@@ -15752,7 +15792,9 @@
         "enabled": true,
         "rank": 6
       },
-      "contentVersion": 1
+      "contentVersion": 1,
+      "imagePath": "/images/C0434.webp",
+      "audioPath": "/audio/C0434.mp3"
     },
     {
       "id": "C0435",
@@ -15787,7 +15829,9 @@
         "enabled": true,
         "rank": 7
       },
-      "contentVersion": 1
+      "contentVersion": 1,
+      "imagePath": "/images/C0435.webp",
+      "audioPath": "/audio/C0435.mp3"
     },
     {
       "id": "C0436",
@@ -15824,7 +15868,9 @@
         "enabled": true,
         "rank": 8
       },
-      "contentVersion": 1
+      "contentVersion": 1,
+      "imagePath": "/images/C0436.webp",
+      "audioPath": "/audio/C0436.mp3"
     },
     {
       "id": "C0437",
@@ -15859,7 +15905,9 @@
         "enabled": true,
         "rank": 9
       },
-      "contentVersion": 1
+      "contentVersion": 1,
+      "imagePath": "/images/C0437.webp",
+      "audioPath": "/audio/C0437.mp3"
     },
     {
       "id": "C0438",
@@ -15894,7 +15942,9 @@
         "enabled": true,
         "rank": 10
       },
-      "contentVersion": 1
+      "contentVersion": 1,
+      "imagePath": "/images/C0438.webp",
+      "audioPath": "/audio/C0438.mp3"
     },
     {
       "id": "C0439",
@@ -15929,7 +15979,9 @@
         "enabled": true,
         "rank": 11
       },
-      "contentVersion": 1
+      "contentVersion": 1,
+      "imagePath": "/images/C0439.webp",
+      "audioPath": "/audio/C0439.mp3"
     },
     {
       "id": "C0440",
@@ -15964,7 +16016,9 @@
         "enabled": true,
         "rank": 12
       },
-      "contentVersion": 1
+      "contentVersion": 1,
+      "imagePath": "/images/C0440.webp",
+      "audioPath": "/audio/C0440.mp3"
     },
     {
       "id": "C0441",
@@ -15998,7 +16052,9 @@
         "enabled": true,
         "rank": 13
       },
-      "contentVersion": 1
+      "contentVersion": 1,
+      "imagePath": "/images/C0441.webp",
+      "audioPath": "/audio/C0441.mp3"
     },
     {
       "id": "C0442",
@@ -16032,7 +16088,9 @@
         "enabled": true,
         "rank": 14
       },
-      "contentVersion": 1
+      "contentVersion": 1,
+      "imagePath": "/images/C0442.webp",
+      "audioPath": "/audio/C0442.mp3"
     },
     {
       "id": "C0443",
@@ -16066,7 +16124,9 @@
         "enabled": true,
         "rank": 18
       },
-      "contentVersion": 1
+      "contentVersion": 1,
+      "imagePath": "/images/C0443.webp",
+      "audioPath": "/audio/C0443.mp3"
     },
     {
       "id": "C0444",

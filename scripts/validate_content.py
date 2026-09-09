@@ -3,7 +3,10 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-CONTENT = Path(__file__).resolve().parents[1] / "data" / "vocabulary.clean.json"
+ROOT = Path(__file__).resolve().parents[1]
+CONTENT = ROOT / "data" / "vocabulary.clean.json"
+IMAGE_DIR = ROOT / "public" / "images"
+AUDIO_DIR = ROOT / "public" / "audio"
 
 
 def main() -> None:
@@ -25,6 +28,17 @@ def main() -> None:
             raise ValueError(f"unknown related word in {entry['id']}")
         if not set(entry["contrastWordIds"]).issubset(entry_ids):
             raise ValueError(f"unknown contrast word in {entry['id']}")
+        if entry["mvp"]["enabled"]:
+            image_path = entry.get("imagePath")
+            audio_path = entry.get("audioPath")
+            if not image_path or not audio_path:
+                raise ValueError(f"missing MVP asset path in {entry['id']}")
+            if not (image_path.startswith("/images/") and (ROOT / "public" / image_path.lstrip("/")).is_file()):
+                raise ValueError(f"missing image asset for {entry['id']}: {image_path}")
+            if not (audio_path.startswith("/audio/") and (ROOT / "public" / audio_path.lstrip("/")).is_file()):
+                raise ValueError(f"missing audio asset for {entry['id']}: {audio_path}")
+        elif "imagePath" in entry or "audioPath" in entry:
+            raise ValueError(f"non-MVP asset path should be absent in {entry['id']}")
     print(f"validated={CONTENT}")
     print(f"entries={len(entries)}")
     print(f"mvp30={len(mvp)}")
