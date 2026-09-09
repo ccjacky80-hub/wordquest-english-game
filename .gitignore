@@ -6,6 +6,8 @@ playwright-report/
 parent-styles.tmp
 public/audio/
 public/images/
+media-output/
+*.pdf
 test-results/
 .env*
 !.env.example
