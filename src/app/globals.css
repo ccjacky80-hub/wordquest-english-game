@@ -368,6 +368,31 @@ h1 {
   box-shadow: 0 0.5rem 0 rgba(199, 85, 73, 0.25);
 }
 
+.map-board > a,
+.map-board > div {
+  min-width: 0;
+  color: inherit;
+  text-decoration: none;
+}
+
+.map-node-complete {
+  border-color: rgba(76, 149, 136, 0.42);
+  color: #27695f;
+  background: rgba(228, 247, 237, 0.86);
+  box-shadow: 0 0.5rem 0 rgba(76, 149, 136, 0.2);
+}
+
+.map-node-locked {
+  color: rgba(24, 50, 75, 0.48);
+  background: rgba(226, 232, 236, 0.58);
+  filter: saturate(0.65);
+}
+
+.map-board > a:focus-visible .map-node,
+.map-board > a:hover .map-node {
+  transform: translateY(-2px);
+}
+
 .map-node-number {
   position: absolute;
   top: 0.55rem;
