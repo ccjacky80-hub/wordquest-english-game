@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import Link from 'next/link';
 import { GameShell } from '@/components/common/GameShell';
 import { createProgressRepository } from '@/db/repositories/progress-repository';
 import { createGameAttempt } from '@/games/game-attempt';
@@ -9,6 +8,7 @@ import type { GameAttempt } from '@/domain/learning/types';
 import type { VocabularyEntry } from '@/content/schemas';
 import { getDailySessionId } from '@/content/progress-scheduler';
 import { getAttemptProtectionState, outcomeAfterProtectedCorrect, shouldEnterSoftRetest } from '@/domain/learning/attempt-protection';
+import { NextActivityTransition } from './NextActivityTransition';
 
 interface PictureMatchGameProps {
   words: VocabularyEntry[];
@@ -140,19 +140,14 @@ export function PictureMatchGame({ words, dayIndex, optionCount = 4 }: PictureMa
   };
 
   if (complete) {
-    return (
-      <section className="reward-card" aria-labelledby="picture-reward-title">
-        <p className="eyebrow">PICTURE MATCH COMPLETE / 看图选词完成</p>
-        <div className="reward-star" aria-hidden="true">✦</div>
-        <h1 id="picture-reward-title">Your word eyes are brighter!</h1>
-        <p>You matched {words.length} pictures with their words. Your progress is saved on this device.</p>
-        <p className="reward-detail">{savedAttemptCount} attempts sent through the Learning Engine.</p>
-        <div className="home-actions reward-actions">
-          <Link className="primary-action" href="/map">See the map</Link>
-          <Link className="secondary-action" href="/">Back home</Link>
-        </div>
-      </section>
-    );
+    return <NextActivityTransition
+      activityLabel="Look & match"
+      nextActivityLabel="Build words"
+      nextActivityHref="/play/word-builder"
+      completionMessage="Your word eyes are brighter!"
+      detail={`You matched ${words.length} pictures with their words. Your progress is saved on this device.`}
+      attempts={savedAttemptCount}
+    />;
   }
 
   return (

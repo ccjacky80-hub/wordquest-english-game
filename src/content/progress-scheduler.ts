@@ -14,22 +14,88 @@ const SUCCESS_OUTCOMES: ReadonlySet<AttemptOutcome> = new Set([
   'revealed',
 ]);
 
-function daySessionPrefix(dayIndex: number): string {
-  return `day${dayIndex}-`;
+const CORE_ACTIVITY_SUFFIXES = [
+  'treasure-hunt',
+  'picture-match',
+  'word-builder',
+  'put-it-somewhere',
+] as const;
+const BOSS_ACTIVITY_SUFFIX = 'boss-mission';
+const BOSS_ACTIVITY_START_DAY = 4;
+const BOSS_ACTIVITY_WORD_COUNT = 3;
+
+export type ActivitySessionSuffix = (typeof CORE_ACTIVITY_SUFFIXES)[number] | typeof BOSS_ACTIVITY_SUFFIX;
+const ALL_ACTIVITY_SUFFIXES: readonly ActivitySessionSuffix[] = [...CORE_ACTIVITY_SUFFIXES, BOSS_ACTIVITY_SUFFIX];
+
+export interface DailyActivityProgress {
+  suffix: ActivitySessionSuffix;
+  complete: boolean;
+  available: boolean;
+  required: boolean;
+  completedCount: number;
+  targetCount: number;
 }
 
-function hasSuccessfulAttempt(
+export function getDailyActivityProgress(
+  mission: Pick<DailyMissionPlan, 'dayIndex' | 'newWordIds' | 'reviewWordIds'>,
+  attempts: readonly GameAttempt[],
+): DailyActivityProgress[] {
+  const targetWordIds = mission.newWordIds.length > 0 ? mission.newWordIds : mission.reviewWordIds;
+  const requiredSuffixes = requiredActivitySuffixes(mission.dayIndex);
+  return ALL_ACTIVITY_SUFFIXES.map((suffix) => {
+    const available = suffix !== BOSS_ACTIVITY_SUFFIX || mission.dayIndex >= BOSS_ACTIVITY_START_DAY;
+    const successfulWordIds = successfulWordIdsForActivity(attempts, mission.dayIndex, suffix);
+    const targetCount = suffix === BOSS_ACTIVITY_SUFFIX
+      ? Math.min(BOSS_ACTIVITY_WORD_COUNT, targetWordIds.length)
+      : targetWordIds.length;
+    return {
+      suffix,
+      complete: available && targetCount > 0 && (suffix === BOSS_ACTIVITY_SUFFIX
+        ? successfulWordIds.size >= targetCount
+        : targetWordIds.every((wordId) => successfulWordIds.has(wordId))),
+      available,
+      required: requiredSuffixes.includes(suffix),
+      completedCount: suffix === BOSS_ACTIVITY_SUFFIX
+        ? Math.min(successfulWordIds.size, targetCount)
+        : targetWordIds.filter((wordId) => successfulWordIds.has(wordId)).length,
+      targetCount,
+    };
+  });
+}
+
+function activitySessionId(dayIndex: number, suffix: ActivitySessionSuffix): string {
+  return `day${dayIndex}-${suffix}`;
+}
+
+function requiredActivitySuffixes(dayIndex: number): readonly ActivitySessionSuffix[] {
+  return dayIndex >= BOSS_ACTIVITY_START_DAY
+    ? [...CORE_ACTIVITY_SUFFIXES, BOSS_ACTIVITY_SUFFIX]
+    : CORE_ACTIVITY_SUFFIXES;
+}
+
+function successfulWordIdsForActivity(
   attempts: readonly GameAttempt[],
   dayIndex: number,
-  wordId: string,
-): boolean {
-  const prefix = daySessionPrefix(dayIndex);
-  return attempts.some(
-    (attempt) =>
-      attempt.sessionId.startsWith(prefix) &&
-      attempt.wordId === wordId &&
-      SUCCESS_OUTCOMES.has(attempt.outcome),
+  suffix: ActivitySessionSuffix,
+): Set<string> {
+  return new Set(
+    attempts
+      .filter((attempt) => attempt.sessionId === activitySessionId(dayIndex, suffix) && SUCCESS_OUTCOMES.has(attempt.outcome))
+      .map((attempt) => attempt.wordId),
   );
+}
+
+function isActivityComplete(
+  targetWordIds: readonly string[],
+  attempts: readonly GameAttempt[],
+  dayIndex: number,
+  suffix: ActivitySessionSuffix,
+): boolean {
+  const successfulWordIds = successfulWordIdsForActivity(attempts, dayIndex, suffix);
+  if (suffix === BOSS_ACTIVITY_SUFFIX) {
+    return successfulWordIds.size >= Math.min(BOSS_ACTIVITY_WORD_COUNT, targetWordIds.length);
+  }
+  return targetWordIds.length > 0 && targetWordIds.every((wordId) => successfulWordIds.has(wordId));
 }
 
 export function isDailyMissionComplete(
@@ -37,7 +103,8 @@ export function isDailyMissionComplete(
   attempts: readonly GameAttempt[],
 ): boolean {
   const targetWordIds = mission.newWordIds.length > 0 ? mission.newWordIds : mission.reviewWordIds;
-  return targetWordIds.length > 0 && targetWordIds.every((wordId) => hasSuccessfulAttempt(attempts, mission.dayIndex, wordId));
+  return targetWordIds.length > 0 && requiredActivitySuffixes(mission.dayIndex)
+    .every((suffix) => isActivityComplete(targetWordIds, attempts, mission.dayIndex, suffix));
 }
 
 export function computeDailyProgress(attempts: readonly GameAttempt[]): DailyProgressState {

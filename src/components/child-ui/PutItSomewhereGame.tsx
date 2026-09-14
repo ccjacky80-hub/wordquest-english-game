@@ -13,13 +13,13 @@ import {
   useSensors,
   type DragEndEvent,
 } from '@dnd-kit/core';
-import Link from 'next/link';
 import { GameShell } from '@/components/common/GameShell';
 import { createProgressRepository } from '@/db/repositories/progress-repository';
 import { createGameAttempt } from '@/games/game-attempt';
 import { getDailySessionId } from '@/content/progress-scheduler';
 import type { GameAttempt } from '@/domain/learning/types';
 import { getAttemptProtectionState, outcomeAfterProtectedCorrect, shouldEnterSoftRetest } from '@/domain/learning/attempt-protection';
+import { NextActivityTransition } from './NextActivityTransition';
 import type { DragMission } from '@/content/drag-missions';
 
 interface PutItSomewhereGameProps {
@@ -146,18 +146,13 @@ export function PutItSomewhereGame({ missions, dayIndex }: PutItSomewhereGamePro
   };
 
   if (complete) {
-    return (
-      <section className="reward-card" aria-labelledby="drag-reward-title">
-        <p className="eyebrow">PUT IT SOMEWHERE COMPLETE / 拖拽完成</p>
-        <div className="reward-star" aria-hidden="true">✦</div>
-        <h1 id="drag-reward-title">You know where words belong!</h1>
-        <p>You completed {missions.length} instruction moves. Your progress is saved on this device.</p>
-        <div className="home-actions reward-actions">
-          <Link className="primary-action" href="/map">See the map</Link>
-          <Link className="secondary-action" href="/">Back home</Link>
-        </div>
-      </section>
-    );
+    return <NextActivityTransition
+      activityLabel="Put it somewhere"
+      nextActivityLabel={dayIndex >= 4 ? 'Mini story boss' : undefined}
+      nextActivityHref={dayIndex >= 4 ? '/play/boss-mission' : undefined}
+      completionMessage="You know where words belong!"
+      detail={`You completed ${missions.length} instruction moves. Your progress is saved on this device.`}
+    />;
   }
 
   return (

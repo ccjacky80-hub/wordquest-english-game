@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { createProgressRepository } from '@/db/repositories/progress-repository';
-import { computeDailyProgress } from './progress-scheduler';
+import { computeDailyProgress, getDailyActivityProgress, type DailyActivityProgress } from './progress-scheduler';
 import { createDailyMission, type DailyMissionPlan } from './daily-plan';
 import { getDueReviewWordIds } from './review-queue';
 
@@ -11,6 +11,8 @@ export interface CurrentDailyMission {
   currentDayIndex: number;
   courseCompleted: boolean;
   isLoading: boolean;
+  activityProgress: DailyActivityProgress[];
+  completedMission?: DailyMissionPlan;
 }
 
 export function useCurrentDailyMission(): CurrentDailyMission {
@@ -18,17 +20,24 @@ export function useCurrentDailyMission(): CurrentDailyMission {
   const [courseCompleted, setCourseCompleted] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [dueReviewIds, setDueReviewIds] = useState<string[]>([]);
+  const [activityProgress, setActivityProgress] = useState<DailyActivityProgress[]>([]);
+  const [completedMission, setCompletedMission] = useState<DailyMissionPlan>();
 
   useEffect(() => {
     let cancelled = false;
     const repository = createProgressRepository();
     void Promise.all([repository.getAllAttempts(), repository.getAllWordProgress()]).then(([attempts, wordProgress]) => {
       if (cancelled) return;
-      const progress = computeDailyProgress(attempts);
-      const plan = createDailyMission(progress.currentDayIndex);
-      setCurrentDayIndex(progress.currentDayIndex);
-      setDueReviewIds(getDueReviewWordIds(plan, wordProgress, new Date().toISOString()));
-      setCourseCompleted(progress.courseCompleted);
+       const progress = computeDailyProgress(attempts);
+       const plan = createDailyMission(progress.currentDayIndex);
+       const completedDayIndex = progress.courseCompleted ? 7 : progress.currentDayIndex - 1;
+       if (completedDayIndex >= 1) setCompletedMission(createDailyMission(completedDayIndex));
+
+       setCurrentDayIndex(progress.currentDayIndex);
+       setDueReviewIds(getDueReviewWordIds(plan, wordProgress, new Date().toISOString()));
+       setActivityProgress(getDailyActivityProgress(plan, attempts));
+       setCourseCompleted(progress.courseCompleted);
+
       setIsLoading(false);
     });
     return () => {
@@ -43,5 +52,7 @@ export function useCurrentDailyMission(): CurrentDailyMission {
     currentDayIndex,
     courseCompleted,
     isLoading,
+    activityProgress,
+    completedMission,
   };
 }

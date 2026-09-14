@@ -1,7 +1,6 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import Link from 'next/link';
 import { GameShell } from '@/components/common/GameShell';
 import { createProgressRepository } from '@/db/repositories/progress-repository';
 import { createGameAttempt } from '@/games/game-attempt';
@@ -9,6 +8,7 @@ import type { GameAttempt } from '@/domain/learning/types';
 import type { VocabularyEntry } from '@/content/schemas';
 import { getDailySessionId } from '@/content/progress-scheduler';
 import { getAttemptProtectionState, outcomeAfterProtectedCorrect, shouldEnterSoftRetest } from '@/domain/learning/attempt-protection';
+import { NextActivityTransition } from './NextActivityTransition';
 
 interface TreasureHuntGameProps {
   words: VocabularyEntry[];
@@ -135,19 +135,14 @@ export function TreasureHuntGame({ words, dayIndex }: TreasureHuntGameProps) {
   };
 
   if (complete) {
-    return (
-      <section className="reward-card" aria-labelledby="reward-title">
-        <p className="eyebrow">MISSION COMPLETE / 任务完成</p>
-        <div className="reward-star" aria-hidden="true">✦</div>
-        <h1 id="reward-title">The trail is brighter!</h1>
-        <p>You helped {words.length} animals. Your progress is saved on this device.</p>
-        <p className="reward-detail">{savedCount} attempts sent through the Learning Engine.</p>
-        <div className="home-actions reward-actions">
-          <Link className="primary-action" href="/map">See the map</Link>
-          <Link className="secondary-action" href="/">Back home</Link>
-        </div>
-      </section>
-    );
+    return <NextActivityTransition
+      activityLabel="Listen & find"
+      nextActivityLabel="Look & match"
+      nextActivityHref="/play/picture-match"
+      completionMessage="The trail is brighter!"
+      detail={`You helped ${words.length} animals. Your progress is saved on this device.`}
+      attempts={savedCount}
+    />;
   }
 
   return (

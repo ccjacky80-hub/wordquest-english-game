@@ -15,9 +15,12 @@ test('boss mission unlocks from learned words and completes three story steps', 
       const transaction = db.transaction('attempts', 'readwrite');
       const store = transaction.objectStore('attempts');
       const ids = ['C0430', 'C0431', 'C0432', 'C0402', 'C0433', 'C0434', 'C0435', 'C0436', 'C0437', 'C0438', 'C0439', 'C0440', 'C0441', 'C0442', 'C0403', 'C0399'];
+      const activities = ['treasure-hunt', 'picture-match', 'word-builder', 'put-it-somewhere'];
       ids.forEach((wordId, index) => {
         const day = index < 6 ? 1 : index < 11 ? 2 : 3;
-        store.put({ id: `seed-${wordId}`, sessionId: `day${day}-picture-match`, gameType: 'picture-match', wordId, promptType: 'image-to-word', outcome: 'independentCorrect', attemptIndex: 1, hintsUsed: 0, audioReplayCount: 0, occurredAt: `2026-09-08T10:${String(index).padStart(2, '0')}:00.000Z`, contentVersion: 1 });
+        activities.forEach((activity) => {
+          store.put({ id: `seed-${day}-${activity}-${wordId}`, sessionId: `day${day}-${activity}`, gameType: activity, wordId, promptType: 'image-to-word', outcome: 'independentCorrect', attemptIndex: 1, hintsUsed: 0, audioReplayCount: 0, occurredAt: `2026-09-08T10:${String(index).padStart(2, '0')}:00.000Z`, contentVersion: 1 });
+        });
       });
       transaction.oncomplete = () => db.close();
     };
@@ -28,7 +31,8 @@ test('boss mission unlocks from learned words and completes three story steps', 
       const db = request.result;
       const transaction = db.transaction('attempts', 'readonly');
       const requestCount = transaction.objectStore('attempts').count();
-      requestCount.onsuccess = () => { resolve(requestCount.result === 16); db.close(); };
+       requestCount.onsuccess = () => { resolve(requestCount.result === 64); db.close(); };
+
     };
   }));
   await page.reload();

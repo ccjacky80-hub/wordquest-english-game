@@ -1,12 +1,12 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import Link from 'next/link';
 import { GameShell } from '@/components/common/GameShell';
 import { createProgressRepository } from '@/db/repositories/progress-repository';
 import { createGameAttempt } from '@/games/game-attempt';
 import { getDailySessionId } from '@/content/progress-scheduler';
 import { getAttemptProtectionState, outcomeAfterProtectedCorrect, shouldEnterSoftRetest } from '@/domain/learning/attempt-protection';
+import { NextActivityTransition } from './NextActivityTransition';
 import type { GameAttempt } from '@/domain/learning/types';
 import type { VocabularyEntry } from '@/content/schemas';
 
@@ -212,19 +212,14 @@ export function WordBuilderGame({ words, dayIndex, defaultLevel = 'L1' }: WordBu
   };
 
   if (complete) {
-    return (
-      <section className="reward-card" aria-labelledby="builder-reward-title">
-        <p className="eyebrow">WORD BUILDER COMPLETE / 拼词完成</p>
-        <div className="reward-star" aria-hidden="true">✦</div>
-        <h1 id="builder-reward-title">Your word trail grows!</h1>
-        <p>You built {words.length} words. Your progress is saved on this device.</p>
-        <p className="reward-detail">{savedAttemptCount} attempts sent through the Learning Engine.</p>
-        <div className="home-actions reward-actions">
-          <Link className="primary-action" href="/map">See the map</Link>
-          <Link className="secondary-action" href="/">Back home</Link>
-        </div>
-      </section>
-    );
+    return <NextActivityTransition
+      activityLabel="Build words"
+      nextActivityLabel="Put it somewhere"
+      nextActivityHref="/play/put-it-somewhere"
+      completionMessage="Your word trail grows!"
+      detail={`You built ${words.length} words. Your progress is saved on this device.`}
+      attempts={savedAttemptCount}
+    />;
   }
 
   return (

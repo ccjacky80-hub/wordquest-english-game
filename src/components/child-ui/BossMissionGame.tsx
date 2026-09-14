@@ -2,7 +2,6 @@
 
 import { useMemo, useRef, useState } from 'react';
 import { DndContext, DragOverlay, closestCenter, MouseSensor, TouchSensor, useDraggable, useDroppable, useSensor, useSensors, type DragEndEvent } from '@dnd-kit/core';
-import Link from 'next/link';
 import { GameShell } from '@/components/common/GameShell';
 import { createProgressRepository } from '@/db/repositories/progress-repository';
 import { createGameAttempt } from '@/games/game-attempt';
@@ -10,6 +9,7 @@ import { getDailySessionId } from '@/content/progress-scheduler';
 import type { GameAttempt } from '@/domain/learning/types';
 import type { BossStep } from '@/content/boss-mission';
 import { getAttemptProtectionState, outcomeAfterProtectedCorrect, shouldEnterSoftRetest } from '@/domain/learning/attempt-protection';
+import { NextActivityTransition } from './NextActivityTransition';
 
 interface BossMissionGameProps { steps: BossStep[]; dayIndex: number; }
 
@@ -77,7 +77,12 @@ export function BossMissionGame({ steps, dayIndex }: BossMissionGameProps) {
   };
 
   const onDragEnd = ({ over }: DragEndEvent) => { if (over) resolveStep(String(over.id)); activeRef.current = null; setActiveId(null); };
-  if (complete) return <section className="reward-card" aria-labelledby="boss-reward-title"><p className="eyebrow">BOSS MISSION COMPLETE / 故事关卡完成</p><div className="reward-star" aria-hidden="true">✦</div><h1 id="boss-reward-title">The Animal Kingdom story shines!</h1><p>You connected {steps.length} words in one story. Your progress is saved on this device.</p><p className="reward-detail">{savedAttemptCount} attempts sent through the Learning Engine.</p><div className="home-actions reward-actions"><Link className="primary-action" href="/map">See the map</Link><Link className="secondary-action" href="/">Back home</Link></div></section>;
+  if (complete) return <NextActivityTransition
+    activityLabel="Mini story boss"
+    completionMessage="The Animal Kingdom story shines!"
+    detail={`You connected ${steps.length} words in one story. Your progress is saved on this device.`}
+    attempts={savedAttemptCount}
+  />;
 
   return <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={({ active }) => { activeRef.current = String(active.id); setActiveId(String(active.id)); }} onDragCancel={() => { activeRef.current = null; setActiveId(null); handledRef.current = false; }} onDragEnd={onDragEnd}>
     <GameShell currentStep={stepIndex} totalSteps={steps.length} title="Boss Mission" attempts={attempts} isComplete={complete} onExit={() => { window.location.href = '/mission'; }} sessionId={sessionId} gameType="mini-story" activityIndex={5}>
