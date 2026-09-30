@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test';
 
+test.use({ serviceWorkers: 'block' });
+
 const day1Words: Record<string, string> = {
   C0430: 'lion',
   C0431: 'zebra',
@@ -69,7 +71,7 @@ test('word builder L1 fills missing letters and persists completion', async ({ p
   expect(attemptCount).toBeGreaterThanOrEqual(7);
 
   await page.reload();
-  await expect(page.locator('.word-builder-prompt')).toBeVisible();
-  await expect(page.locator('.word-builder-prompt')).not.toHaveAttribute('data-target-word-id', 'C0430');
+  await expect(page.getByRole('heading', { name: /your word trail grows/i })).toBeVisible();
+  await expect(page.getByText(/progress is saved on this device/i)).toBeVisible();
   expect(pageErrors).toEqual([]);
 });

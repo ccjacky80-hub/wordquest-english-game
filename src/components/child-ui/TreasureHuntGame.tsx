@@ -43,12 +43,14 @@ export function TreasureHuntGame({ words, dayIndex }: TreasureHuntGameProps) {
   const failedAttempts = attempts.filter((attempt) => attempt.wordId === round.target.id && attempt.outcome === 'wrong').length;
   const protection = getAttemptProtectionState(failedAttempts);
 
-  const playAudio = useCallback(() => {
+  const playAudio = useCallback((fallbackOnFailure = true) => {
     if (!round.target.audioPath) return;
     audioRef.current?.pause();
     const audio = new Audio(round.target.audioPath);
     audioRef.current = audio;
-    void audio.play().catch(() => setFeedback('Tap Listen again to hear the word.'));
+    void audio.play().catch(() => {
+      if (fallbackOnFailure) setFeedback('Tap Listen again to hear the word.');
+    });
   }, [round.target.audioPath]);
 
   useEffect(() => {
@@ -127,7 +129,7 @@ export function TreasureHuntGame({ words, dayIndex }: TreasureHuntGameProps) {
           : nextProtection.stage === 'hint'
             ? `A small clue: listen for ${round.target.word}.`
             : 'Try this one. Listen again.');
-        playAudio();
+        playAudio(false);
         window.setTimeout(() => setLocked(false), 500);
       }
     }
@@ -160,7 +162,7 @@ export function TreasureHuntGame({ words, dayIndex }: TreasureHuntGameProps) {
       <div className="treasure-prompt" data-target-word-id={round.target.id}>
         <p className="game-eyebrow">LISTEN &amp; FIND</p>
         <h1>Find the animal!</h1>
-        <button className="listen-button" type="button" onClick={playAudio}>
+        <button className="listen-button" type="button" onClick={() => playAudio()}>
           🔊 Listen again
         </button>
         <p className="feedback-text" aria-live="polite">{feedback}</p>

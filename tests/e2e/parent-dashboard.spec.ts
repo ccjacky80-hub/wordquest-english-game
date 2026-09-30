@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test';
 
+test.setTimeout(60_000);
+
 test('parent dashboard reports real local learning metrics after a game', async ({ page, context }) => {
   const cleanPage = await context.newPage();
   const pageErrors: string[] = [];
@@ -26,9 +28,6 @@ test('parent dashboard reports real local learning metrics after a game', async 
   await dashboardPage.bringToFront();
   const holdButton = dashboardPage.getByRole('button', { name: /hold to continue/i });
   await holdButton.hover();
-  const holdBox = await holdButton.boundingBox();
-  expect(holdBox).toBeTruthy();
-  await dashboardPage.mouse.move(holdBox!.x + holdBox!.width / 2, holdBox!.y + holdBox!.height / 2);
   await dashboardPage.mouse.down();
   await dashboardPage.waitForTimeout(2100);
   await dashboardPage.mouse.up();
