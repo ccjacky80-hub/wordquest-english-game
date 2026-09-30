@@ -43,18 +43,23 @@ export function TreasureHuntGame({ words, dayIndex }: TreasureHuntGameProps) {
   const failedAttempts = attempts.filter((attempt) => attempt.wordId === round.target.id && attempt.outcome === 'wrong').length;
   const protection = getAttemptProtectionState(failedAttempts);
 
-  const playAudio = useCallback((fallbackOnFailure = true) => {
+  const playAudio = useCallback((fallbackOnFailure = true, expectedFeedback?: string) => {
     if (!round.target.audioPath) return;
     audioRef.current?.pause();
     const audio = new Audio(round.target.audioPath);
     audioRef.current = audio;
     void audio.play().catch(() => {
-      if (fallbackOnFailure) setFeedback('Tap Listen again to hear the word.');
+      if (!fallbackOnFailure) return;
+      setFeedback((current) => (
+        expectedFeedback === undefined || current === expectedFeedback
+          ? 'Tap Listen again to hear the word.'
+          : current
+      ));
     });
   }, [round.target.audioPath]);
 
   useEffect(() => {
-    playAudio();
+    playAudio(true, 'Listen, then find the animal.');
     return () => {
       audioRef.current?.pause();
     };
